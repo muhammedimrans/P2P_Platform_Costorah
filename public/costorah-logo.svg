@@ -1,0 +1,23 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="costorahShieldGrad" x1="4" y1="4" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0B65C6" />
+      <stop offset="50%" stop-color="#0284C7" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    <linearGradient id="costorahInnerRim" x1="12" y1="10" x2="52" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#34D399" />
+    </linearGradient>
+    <linearGradient id="costorahAccentGrad" x1="16" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#D1FAE5" />
+    </linearGradient>
+  </defs>
+  <path d="M32 3L58 16V42C58 51.8 46.8 58.8 32 61.5C17.2 58.8 6 51.8 6 42V16L32 3Z" fill="url(#costorahShieldGrad)" />
+  <path d="M32 7.5L53.5 18.2V41.2C53.5 49.2 44.2 55 32 57.2C19.8 55 10.5 49.2 10.5 41.2V18.2L32 7.5Z" fill="#061326" fill-opacity="0.32" stroke="url(#costorahInnerRim)" stroke-opacity="0.55" stroke-width="1.8" />
+  <path d="M42.5 22C39.8 19.1 35.9 17.4 31.5 17.4C23.2 17.4 16.5 23.9 16.5 32C16.5 40.1 23.2 46.6 31.5 46.6C35.9 46.6 39.8 44.9 42.5 42" stroke="url(#costorahAccentGrad)" stroke-width="6.4" stroke-linecap="round" />
+  <polygon points="32,24.5 39.5,32 32,39.5 24.5,32" fill="#10B981" stroke="#FFFFFF" stroke-width="2.2" />
+  <circle cx="45" cy="23.5" r="3" fill="#34D399" stroke="#FFFFFF" stroke-width="1.4" />
+  <circle cx="45" cy="40.5" r="3" fill="#38BDF8" stroke="#FFFFFF" stroke-width="1.4" />
+</svg>

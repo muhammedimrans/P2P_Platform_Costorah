@@ -1,0 +1,478 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-sans: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #0B0E14;
+    color: #F8FAFC;
+    overflow-x: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-mono, .tabular-nums {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ============================================================================
+   NIGHT UI ENHANCED CONTRAST ([data-theme="night"])
+   Ensure muted slate classes remain bright and legible on dark surfaces
+   ============================================================================ */
+[data-theme="night"] .text-slate-400,
+[data-theme="night"] .text-slate-500 {
+  color: #CBD5E1 !important;
+  font-weight: 500;
+}
+
+/* ============================================================================
+   GLOBAL DAY UI THEME OVERRIDES ([data-theme="day"])
+   Ultra-Dark High-Contrast Ink Typography (#000000 / #090D16) across all pages
+   ============================================================================ */
+[data-theme="day"] {
+  color-scheme: light !important;
+  background-color: #F1F5F9 !important;
+  color: #000000 !important;
+}
+
+/* Prevent washed-out opacity on text or labels in Day UI */
+[data-theme="day"] .opacity-60,
+[data-theme="day"] .opacity-70,
+[data-theme="day"] .opacity-75,
+[data-theme="day"] .opacity-80 {
+  opacity: 1 !important;
+}
+
+/* Primary & Secondary Surfaces across all Views in Day Mode */
+[data-theme="day"] .bg-\[\#0B0E14\],
+[data-theme="day"] .bg-\[\#070A0F\],
+[data-theme="day"] .bg-\[\#06090E\],
+[data-theme="day"] .bg-\[\#060A11\],
+[data-theme="day"] .bg-\[\#070B12\],
+[data-theme="day"] .bg-\[\#080D16\],
+[data-theme="day"] .bg-\[\#090D14\],
+[data-theme="day"] .bg-\[\#0A0E16\],
+[data-theme="day"] .bg-\[\#0B1220\],
+[data-theme="day"] .bg-\[\#080C14\],
+[data-theme="day"] .bg-\[\#05080D\] {
+  background-color: #E8F0F8 !important;
+  color: #090D16 !important;
+}
+
+/* Table Headers & Card Headers */
+[data-theme="day"] .bg-\[\#0F141C\],
+[data-theme="day"] .bg-\[\#0F1829\],
+[data-theme="day"] .bg-\[\#111A2B\] {
+  background-color: #DCE8F5 !important;
+  color: #090D16 !important;
+}
+
+/* Main Card Containers & Panels */
+[data-theme="day"] .bg-\[\#131A24\],
+[data-theme="day"] .bg-\[\#0E1724\],
+[data-theme="day"] .bg-\[\#0C111A\],
+[data-theme="day"] .bg-\[\#0C111B\],
+[data-theme="day"] .bg-\[\#0D131D\],
+[data-theme="day"] .bg-\[\#0D1422\],
+[data-theme="day"] .bg-\[\#0F1724\],
+[data-theme="day"] .bg-\[\#0F1726\],
+[data-theme="day"] .bg-\[\#0F1828\],
+[data-theme="day"] .bg-\[\#101826\],
+[data-theme="day"] .bg-\[\#111824\],
+[data-theme="day"] .bg-\[\#0E1522\],
+[data-theme="day"] .bg-\[\#0A101B\],
+[data-theme="day"] .bg-\[\#0D1524\],
+[data-theme="day"] .bg-\[\#0D1626\],
+[data-theme="day"] .bg-\[\#F4F8FC\],
+[data-theme="day"] .bg-slate-900,
+[data-theme="day"] .bg-slate-950 {
+  background-color: #FFFFFF !important;
+  color: #090D16 !important;
+  box-shadow: 0 6px 22px rgba(15, 23, 42, 0.08);
+}
+
+/* Interactive Secondary Buttons, Chips & Nav Pills */
+[data-theme="day"] .bg-\[\#18212F\],
+[data-theme="day"] .bg-\[\#101926\],
+[data-theme="day"] .bg-\[\#101B2B\],
+[data-theme="day"] .bg-\[\#131C2E\],
+[data-theme="day"] .bg-\[\#141C2B\],
+[data-theme="day"] .bg-\[\#141E30\],
+[data-theme="day"] .bg-\[\#182232\],
+[data-theme="day"] .bg-\[\#19253D\],
+[data-theme="day"] .bg-\[\#1C2638\] {
+  background-color: #DBEAFE !important;
+  color: #032B56 !important;
+  font-weight: 700 !important;
+  border-color: #60A5FA !important;
+}
+
+/* Dark Hover & Focus Background Overrides in Day Mode (prevents hover/focus 'blackout') */
+[data-theme="day"] .hover\:bg-\[\#131A24\]:hover,
+[data-theme="day"] .hover\:bg-\[\#0B0E14\]:hover,
+[data-theme="day"] .hover\:bg-\[\#0F141C\]:hover,
+[data-theme="day"] .hover\:bg-\[\#0F1726\]:hover,
+[data-theme="day"] .hover\:bg-\[\#19253D\]:hover,
+[data-theme="day"] .hover\:bg-\[\#1C2638\]:hover,
+[data-theme="day"] .hover\:bg-slate-700:hover,
+[data-theme="day"] .hover\:bg-slate-800:hover,
+[data-theme="day"] .hover\:bg-slate-900:hover {
+  background-color: #DBEAFE !important;
+  color: #020617 !important;
+}
+
+[data-theme="day"] .hover\:bg-slate-950:hover {
+  background-color: #0852A3 !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="day"] .focus\:bg-\[\#0F1726\]:focus,
+[data-theme="day"] .focus\:bg-\[\#131A24\]:focus,
+[data-theme="day"] .focus\:bg-\[\#0B0E14\]:focus {
+  background-color: #FFFFFF !important;
+  color: #090D16 !important;
+}
+
+[data-theme="day"] .hover\:bg-white\/\[0\.02\]:hover,
+[data-theme="day"] .hover\:bg-white\/\[0\.06\]:hover,
+[data-theme="day"] .hover\:bg-white\/\[0\.08\]:hover,
+[data-theme="day"] .hover\:bg-white\/\[0\.1\]:hover,
+[data-theme="day"] .hover\:bg-white\/\[0\.12\]:hover,
+[data-theme="day"] .hover\:bg-white\/5:hover,
+[data-theme="day"] .hover\:bg-white\/10:hover,
+[data-theme="day"] .hover\:bg-white\/20:hover {
+  background-color: #E2E8F0 !important;
+  color: #090D16 !important;
+}
+
+/* Borders & Dividers in Day Mode (Darker for crisp card definition) */
+[data-theme="day"] .border-white\/\[0\.08\],
+[data-theme="day"] .border-white\/\[0\.06\],
+[data-theme="day"] .border-white\/\[0\.07\],
+[data-theme="day"] .border-white\/10,
+[data-theme="day"] .border-white\/15,
+[data-theme="day"] .border-white\/20,
+[data-theme="day"] .border-slate-200,
+[data-theme="day"] .border-slate-200\/80 {
+  border-color: #94A3B8 !important;
+}
+
+[data-theme="day"] .divide-white\/\[0\.08\] > :not([hidden]) ~ :not([hidden]),
+[data-theme="day"] .divide-white\/\[0\.06\] > :not([hidden]) ~ :not([hidden]),
+[data-theme="day"] .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #94A3B8 !important;
+}
+
+/* Deep Black Primary Typography in Day Mode (excluding solid dark/brand buttons) */
+[data-theme="day"] :is(
+  .text-white,
+  .text-slate-50,
+  .text-slate-100,
+  .text-slate-200,
+  .text-slate-700,
+  .text-slate-800,
+  .text-slate-900,
+  .text-slate-950,
+  .text-\[\#F1F5F9\]
+):not(
+  .bg-\[\#0B65C6\], .bg-\[\#0B65C6\] *,
+  .bg-\[\#0852A3\], .bg-\[\#0852A3\] *,
+  .bg-\[\#0953A6\], .bg-\[\#0953A6\] *,
+  .bg-\[\#0952A3\], .bg-\[\#0952A3\] *,
+  .bg-emerald-500, .bg-emerald-500 *,
+  .bg-emerald-600, .bg-emerald-600 *,
+  .bg-emerald-700, .bg-emerald-700 *,
+  .bg-red-500, .bg-red-500 *,
+  .bg-red-600, .bg-red-600 *,
+  .bg-amber-500, .bg-amber-500 *,
+  .bg-slate-800, .bg-slate-800 *
+) {
+  color: #000000 !important;
+}
+
+/* Secondary & Muted Text in Day Mode -> Upgraded to Ultra-Dark Ink (#090D16) with Semibold weight */
+[data-theme="day"] :is(
+  .text-slate-300,
+  .text-slate-400,
+  .text-slate-500,
+  .text-slate-600,
+  .text-gray-400,
+  .text-gray-500,
+  .text-gray-600
+):not(
+  .bg-\[\#0B65C6\], .bg-\[\#0B65C6\] *,
+  .bg-\[\#0852A3\], .bg-\[\#0852A3\] *,
+  .bg-\[\#0953A6\], .bg-\[\#0953A6\] *,
+  .bg-\[\#0952A3\], .bg-\[\#0952A3\] *,
+  .bg-emerald-500, .bg-emerald-500 *,
+  .bg-emerald-600, .bg-emerald-600 *,
+  .bg-emerald-700, .bg-emerald-700 *,
+  .bg-red-600, .bg-red-600 *,
+  .bg-slate-800, .bg-slate-800 *
+) {
+  color: #090D16 !important;
+  font-weight: 600 !important;
+}
+
+/* Keep brand blue hover buttons readable with white text on hover */
+[data-theme="day"] .hover\:bg-\[\#0B65C6\]:hover,
+[data-theme="day"] .hover\:bg-\[\#0B65C6\]:hover * {
+  color: #FFFFFF !important;
+}
+
+/* High-Contrast Accent Text in Day Mode */
+[data-theme="day"] .text-emerald-400,
+[data-theme="day"] .text-emerald-300,
+[data-theme="day"] .text-emerald-200,
+[data-theme="day"] .text-emerald-500,
+[data-theme="day"] .text-emerald-600,
+[data-theme="day"] .text-emerald-700 {
+  color: #064E3B !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="day"] .text-cyan-400,
+[data-theme="day"] .text-cyan-300,
+[data-theme="day"] .text-cyan-200,
+[data-theme="day"] .text-sky-400,
+[data-theme="day"] .text-sky-600,
+[data-theme="day"] .text-sky-700 {
+  color: #032B56 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="day"] .text-amber-400,
+[data-theme="day"] .text-amber-300,
+[data-theme="day"] .text-amber-200,
+[data-theme="day"] .text-amber-600,
+[data-theme="day"] .text-amber-700 {
+  color: #78350F !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="day"] .text-indigo-300,
+[data-theme="day"] .text-indigo-200 {
+  color: #1E1B4B !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="day"] .text-red-300,
+[data-theme="day"] .text-red-200,
+[data-theme="day"] .text-red-400 {
+  color: #7F1D1D !important;
+  font-weight: 700 !important;
+}
+
+/* Alert, Status & Specific Accent Card Surfaces in Day Mode */
+[data-theme="day"] .bg-emerald-950,
+[data-theme="day"] .bg-emerald-950\/70,
+[data-theme="day"] .bg-emerald-950\/60,
+[data-theme="day"] .bg-emerald-950\/50,
+[data-theme="day"] .bg-emerald-950\/40,
+[data-theme="day"] .bg-emerald-950\/30,
+[data-theme="day"] .bg-emerald-950\/20 {
+  background-color: #D1FAE5 !important;
+  border-color: #059669 !important;
+  color: #064E3B !important;
+}
+
+[data-theme="day"] .bg-amber-950,
+[data-theme="day"] .bg-amber-950\/70,
+[data-theme="day"] .bg-amber-950\/60,
+[data-theme="day"] .bg-amber-950\/50,
+[data-theme="day"] .bg-amber-950\/40,
+[data-theme="day"] .bg-amber-950\/30,
+[data-theme="day"] .bg-amber-950\/20 {
+  background-color: #FEF3C7 !important;
+  border-color: #D97706 !important;
+  color: #78350F !important;
+}
+
+[data-theme="day"] .bg-red-950,
+[data-theme="day"] .bg-red-950\/70,
+[data-theme="day"] .bg-red-950\/60,
+[data-theme="day"] .bg-red-950\/50,
+[data-theme="day"] .bg-red-950\/40,
+[data-theme="day"] .bg-red-950\/30,
+[data-theme="day"] .bg-red-950\/20 {
+  background-color: #FEE2E2 !important;
+  border-color: #DC2626 !important;
+  color: #7F1D1D !important;
+}
+
+[data-theme="day"] .bg-cyan-950,
+[data-theme="day"] .bg-cyan-950\/60,
+[data-theme="day"] .bg-cyan-950\/50,
+[data-theme="day"] .bg-cyan-950\/40,
+[data-theme="day"] .bg-cyan-950\/30,
+[data-theme="day"] .bg-blue-950\/40,
+[data-theme="day"] .bg-blue-950\/20 {
+  background-color: #E0F2FE !important;
+  border-color: #0284C7 !important;
+  color: #032B56 !important;
+}
+
+/* Translucent Hover, Pill & Secondary Card Surfaces in Day Mode */
+[data-theme="day"] .bg-white\/\[0\.02\],
+[data-theme="day"] .bg-white\/\[0\.04\],
+[data-theme="day"] .bg-white\/\[0\.05\],
+[data-theme="day"] .bg-white\/\[0\.06\],
+[data-theme="day"] .bg-white\/\[0\.08\],
+[data-theme="day"] .bg-white\/5,
+[data-theme="day"] .bg-white\/10,
+[data-theme="day"] .bg-white\/15,
+[data-theme="day"] .bg-black\/20,
+[data-theme="day"] .bg-black\/30,
+[data-theme="day"] .bg-black\/40 {
+  background-color: #E2E8F0 !important;
+  color: #090D16 !important;
+}
+
+[data-theme="day"] .bg-slate-800 {
+  background-color: #0B65C6 !important;
+  color: #FFFFFF !important;
+  border-color: #0B65C6 !important;
+}
+
+[data-theme="day"] .bg-slate-800,
+[data-theme="day"] .bg-slate-800 *:not(input):not(select):not(textarea) {
+  color: #FFFFFF !important;
+}
+
+[data-theme="day"] .bg-slate-800\/90,
+[data-theme="day"] .bg-slate-800\/80,
+[data-theme="day"] .bg-slate-800\/70,
+[data-theme="day"] .bg-slate-800\/60,
+[data-theme="day"] .bg-slate-800\/50,
+[data-theme="day"] .bg-slate-800\/40,
+[data-theme="day"] .bg-slate-900\/90,
+[data-theme="day"] .bg-slate-900\/80,
+[data-theme="day"] .bg-slate-900\/60,
+[data-theme="day"] .bg-slate-900\/50,
+[data-theme="day"] .bg-slate-900\/40 {
+  background-color: #E2E8F0 !important;
+  color: #090D16 !important;
+  border-color: #64748B !important;
+}
+
+/* ============================================================================
+   FORM CONTROLS & DROPDOWNS IN DAY MODE ([data-theme="day"])
+   Explicitly enforce light surfaces (#FFFFFF) and high-contrast dark text
+   (#090D16 / #000000) on all inputs, textareas, native selects, and custom
+   combobox/listbox dropdowns to prevent any 'blackout' issue.
+   ============================================================================ */
+[data-theme="day"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+[data-theme="day"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):hover,
+[data-theme="day"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+[data-theme="day"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):active,
+[data-theme="day"] select,
+[data-theme="day"] select:hover,
+[data-theme="day"] select:focus,
+[data-theme="day"] textarea,
+[data-theme="day"] textarea:hover,
+[data-theme="day"] textarea:focus {
+  color-scheme: light !important;
+  background-color: #FFFFFF !important;
+  color: #090D16 !important;
+  -webkit-text-fill-color: #090D16 !important;
+  caret-color: #0B65C6 !important;
+  font-weight: 700 !important;
+  border-color: #64748B !important;
+}
+
+[data-theme="day"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+[data-theme="day"] select:focus,
+[data-theme="day"] textarea:focus {
+  border-color: #0B65C6 !important;
+  box-shadow: 0 0 0 3px rgba(11, 101, 198, 0.15) !important;
+}
+
+/* Prevent WebKit/Browser Autofill from painting dark backgrounds or white text */
+[data-theme="day"] input:-webkit-autofill,
+[data-theme="day"] input:-webkit-autofill:hover,
+[data-theme="day"] input:-webkit-autofill:focus,
+[data-theme="day"] input:-webkit-autofill:active,
+[data-theme="day"] textarea:-webkit-autofill,
+[data-theme="day"] select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+  box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+  -webkit-text-fill-color: #090D16 !important;
+  color: #090D16 !important;
+  caret-color: #0B65C6 !important;
+}
+
+[data-theme="day"] input::placeholder,
+[data-theme="day"] textarea::placeholder {
+  color: #475569 !important;
+  -webkit-text-fill-color: #475569 !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="day"] select option,
+[data-theme="day"] select optgroup {
+  background-color: #FFFFFF !important;
+  color: #090D16 !important;
+  font-weight: 600 !important;
+}
+
+/* CustomSelect Combobox Trigger & Listbox Dropdown Menu in Day Mode */
+[data-theme="day"] button[role="combobox"],
+[data-theme="day"] [role="combobox"] {
+  background-color: #FFFFFF !important;
+  color: #090D16 !important;
+  border-color: #64748B !important;
+}
+
+[data-theme="day"] button[role="combobox"]:hover,
+[data-theme="day"] [role="combobox"]:hover,
+[data-theme="day"] button[role="combobox"]:focus,
+[data-theme="day"] [role="combobox"]:focus {
+  background-color: #F8FAFC !important;
+  color: #000000 !important;
+  border-color: #0B65C6 !important;
+}
+
+[data-theme="day"] [role="combobox"] span {
+  color: #090D16 !important;
+}
+
+[data-theme="day"] [role="listbox"] {
+  background-color: #FFFFFF !important;
+  color: #090D16 !important;
+  border-color: #64748B !important;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16) !important;
+}
+
+[data-theme="day"] [role="listbox"] [role="option"] {
+  background-color: transparent !important;
+  color: #090D16 !important;
+}
+
+[data-theme="day"] [role="listbox"] [role="option"]:hover,
+[data-theme="day"] [role="listbox"] [role="option"]:focus {
+  background-color: #EFF6FF !important;
+  color: #000000 !important;
+}
+
+[data-theme="day"] [role="listbox"] [role="option"][aria-selected="true"] {
+  background-color: #DBEAFE !important;
+  color: #032B56 !important;
+  border-color: #60A5FA !important;
+}
+
+[data-theme="day"] [role="listbox"] [role="option"] span {
+  color: #090D16 !important;
+}
+

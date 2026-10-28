@@ -1,0 +1,6 @@
+{
+  "name": "COSTORAH — Escrow-Protected P2P Crypto Marketplace",
+  "description": "Next-generation peer-to-peer cryptocurrency marketplace with formal 16-state escrow locking, strict country-to-fiat settlement isolation, transparent 1% fee accounting, and verifiable advertiser trust scores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

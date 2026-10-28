@@ -1,0 +1,2164 @@
+{
+  "currentUser": {
+    "id": "usr_alex_trader",
+    "displayName": "Alex Rivera (You)",
+    "email": "alex.rivera@costorah.io",
+    "avatarUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2080%2080%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g1%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%2280%22%20y2%3D%2280%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230B65C6%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2310B981%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20rx%3D%2240%22%20fill%3D%22url(%23g1)%22%2F%3E%3Ccircle%20cx%3D%2240%22%20cy%3D%2231%22%20r%3D%2213%22%20fill%3D%22%23FFFFFF%22%2F%3E%3Cpath%20d%3D%22M18%2066C21%2053%2030%2047%2040%2047C50%2047%2059%2053%2062%2066%22%20fill%3D%22%23FFFFFF%22%2F%3E%3C%2Fsvg%3E",
+    "bio": "Costorah Institutional & P2P Liquidity Desk · Instant PhonePe, GPay, Paytm, IMPS & SEPA Settlement",
+    "countryCode": "IN",
+    "preferredFiat": "INR",
+    "role": "USER",
+    "kycTier": "TIER_2_VERIFIED",
+    "reputationScore": 99.4,
+    "completedTrades": 149,
+    "completionRatePct": 99.4,
+    "wallets": [],
+    "identities": [
+      {
+        "id": "id_user_cred_1",
+        "provider": "USER_CREDENTIALS",
+        "identifier": "alex.rivera@costorah.io",
+        "linkedAt": "2026-09-10T07:55:00Z"
+      },
+      {
+        "id": "id_google_1",
+        "provider": "GOOGLE_OAUTH",
+        "identifier": "alex.rivera@costorah.io",
+        "linkedAt": "2026-09-10T08:00:00Z"
+      }
+    ],
+    "paymentMethods": [
+      {
+        "id": "pm_alex_hdfc_bank",
+        "userId": "usr_alex_trader",
+        "methodName": "IMPS Bank Transfer",
+        "category": "BANK_TRANSFER",
+        "fiatCurrency": "INR",
+        "accountHolder": "Alex Rivera",
+        "accountIdentifier": "Acct •••• 9920 · IFSC HDFC0000124",
+        "bankOrProvider": "HDFC Bank Ltd (Nariman Point)",
+        "ifscOrSwiftCode": "HDFC0000124",
+        "accountType": "SAVINGS",
+        "branchName": "Nariman Point, Mumbai",
+        "isVerified": true,
+        "verifiedAt": "2026-10-09T11:00:00Z",
+        "verificationMethod": "IMPS Penny-Drop Verified"
+      },
+      {
+        "id": "pm_alex_phonepe",
+        "userId": "usr_alex_trader",
+        "methodName": "PhonePe",
+        "category": "UPI_APP",
+        "fiatCurrency": "INR",
+        "accountHolder": "Alex Rivera",
+        "accountIdentifier": "9820114490@ybl",
+        "bankOrProvider": "PhonePe / Yes Bank UPI",
+        "isVerified": true,
+        "verifiedAt": "2026-10-10T09:15:00Z",
+        "verificationMethod": "NPCI UPI VPA Handshake"
+      },
+      {
+        "id": "pm_alex_gpay",
+        "userId": "usr_alex_trader",
+        "methodName": "Google Pay (GPay)",
+        "category": "UPI_APP",
+        "fiatCurrency": "INR",
+        "accountHolder": "Alex Rivera",
+        "accountIdentifier": "alex.rivera@okhdfcbank",
+        "bankOrProvider": "Google Pay / HDFC Bank",
+        "isVerified": true,
+        "verifiedAt": "2026-10-11T14:20:00Z",
+        "verificationMethod": "NPCI UPI VPA Handshake"
+      },
+      {
+        "id": "pm_alex_paytm",
+        "userId": "usr_alex_trader",
+        "methodName": "Paytm",
+        "category": "UPI_APP",
+        "fiatCurrency": "INR",
+        "accountHolder": "Alex Rivera",
+        "accountIdentifier": "9820114490@paytm",
+        "bankOrProvider": "Paytm Payments / Axis UPI",
+        "isVerified": false
+      },
+      {
+        "id": "pm_alex_card",
+        "userId": "usr_alex_trader",
+        "methodName": "Credit / Debit Card",
+        "category": "CARD",
+        "fiatCurrency": "USD",
+        "accountHolder": "Alex Rivera",
+        "accountIdentifier": "Visa Infinite •••• 8842",
+        "bankOrProvider": "JPMorgan Chase Visa",
+        "expiryDate": "08/29",
+        "isVerified": true,
+        "verifiedAt": "2026-10-12T11:00:00Z",
+        "verificationMethod": "3DS2 $1.00 Micro-Auth Hold"
+      },
+      {
+        "id": "pm_alex_sepa",
+        "userId": "usr_alex_trader",
+        "methodName": "SEPA Instant",
+        "category": "BANK_TRANSFER",
+        "fiatCurrency": "EUR",
+        "accountHolder": "Alex Rivera",
+        "accountIdentifier": "DE89 3704 0044 0532 0130 00",
+        "bankOrProvider": "Commerzbank Frankfurt",
+        "ifscOrSwiftCode": "COBADEFFXXX",
+        "accountType": "CURRENT",
+        "branchName": "Frankfurt Main",
+        "isVerified": true,
+        "verifiedAt": "2026-09-15T16:40:00Z",
+        "verificationMethod": "IBAN Penny-Drop Verification"
+      }
+    ],
+    "bankAccounts": [
+      {
+        "id": "bank_alex_hdfc_1",
+        "userId": "usr_alex_trader",
+        "accountHolderName": "Alex Rivera",
+        "bankName": "HDFC Bank Ltd",
+        "accountNumber": "50100293849920",
+        "maskedAccountNumber": "•••• 9920",
+        "ifscOrSwiftCode": "HDFC0000124",
+        "accountType": "SAVINGS",
+        "branchName": "Nariman Point, Mumbai",
+        "fiatCurrency": "INR",
+        "linkedUpiId": "alex.rivera@okhdfcbank",
+        "isPrimary": true,
+        "isVerified": true,
+        "createdAt": "2026-10-09T11:00:00Z"
+      },
+      {
+        "id": "bank_alex_sepa_2",
+        "userId": "usr_alex_trader",
+        "accountHolderName": "Alex Rivera",
+        "bankName": "Commerzbank Frankfurt",
+        "accountNumber": "DE89370400440532013000",
+        "maskedAccountNumber": "•••• 3000",
+        "ifscOrSwiftCode": "COBADEFFXXX",
+        "accountType": "CURRENT",
+        "branchName": "Frankfurt Corporate Center",
+        "fiatCurrency": "EUR",
+        "isPrimary": false,
+        "isVerified": true,
+        "createdAt": "2026-09-15T16:40:00Z"
+      }
+    ],
+    "twoFactorEnabled": true,
+    "recoveryGuardianEmail": "security-backup@costorah.io",
+    "notificationPreferences": {
+      "tradeStarted": true,
+      "paymentReceived": true,
+      "disputeOpened": true
+    },
+    "createdAt": "2026-09-10T08:00:00Z"
+  },
+  "allUsers": [
+    {
+      "id": "usr_alex_trader",
+      "displayName": "Alex Rivera (You)",
+      "email": "alex.rivera@costorah.io",
+      "avatarUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2080%2080%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g1%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%2280%22%20y2%3D%2280%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230B65C6%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2310B981%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20rx%3D%2240%22%20fill%3D%22url(%23g1)%22%2F%3E%3Ccircle%20cx%3D%2240%22%20cy%3D%2231%22%20r%3D%2213%22%20fill%3D%22%23FFFFFF%22%2F%3E%3Cpath%20d%3D%22M18%2066C21%2053%2030%2047%2040%2047C50%2047%2059%2053%2062%2066%22%20fill%3D%22%23FFFFFF%22%2F%3E%3C%2Fsvg%3E",
+      "bio": "Costorah Institutional & P2P Liquidity Desk · Instant PhonePe, GPay, Paytm, IMPS & SEPA Settlement",
+      "countryCode": "IN",
+      "preferredFiat": "INR",
+      "role": "USER",
+      "kycTier": "TIER_2_VERIFIED",
+      "reputationScore": 99.4,
+      "completedTrades": 149,
+      "completionRatePct": 99.4,
+      "wallets": [],
+      "identities": [
+        {
+          "id": "id_user_cred_1",
+          "provider": "USER_CREDENTIALS",
+          "identifier": "alex.rivera@costorah.io",
+          "linkedAt": "2026-09-10T07:55:00Z"
+        },
+        {
+          "id": "id_google_1",
+          "provider": "GOOGLE_OAUTH",
+          "identifier": "alex.rivera@costorah.io",
+          "linkedAt": "2026-09-10T08:00:00Z"
+        }
+      ],
+      "paymentMethods": [
+        {
+          "id": "pm_alex_hdfc_bank",
+          "userId": "usr_alex_trader",
+          "methodName": "IMPS Bank Transfer",
+          "category": "BANK_TRANSFER",
+          "fiatCurrency": "INR",
+          "accountHolder": "Alex Rivera",
+          "accountIdentifier": "Acct •••• 9920 · IFSC HDFC0000124",
+          "bankOrProvider": "HDFC Bank Ltd (Nariman Point)",
+          "ifscOrSwiftCode": "HDFC0000124",
+          "accountType": "SAVINGS",
+          "branchName": "Nariman Point, Mumbai",
+          "isVerified": true,
+          "verifiedAt": "2026-10-09T11:00:00Z",
+          "verificationMethod": "IMPS Penny-Drop Verified"
+        },
+        {
+          "id": "pm_alex_phonepe",
+          "userId": "usr_alex_trader",
+          "methodName": "PhonePe",
+          "category": "UPI_APP",
+          "fiatCurrency": "INR",
+          "accountHolder": "Alex Rivera",
+          "accountIdentifier": "9820114490@ybl",
+          "bankOrProvider": "PhonePe / Yes Bank UPI",
+          "isVerified": true,
+          "verifiedAt": "2026-10-10T09:15:00Z",
+          "verificationMethod": "NPCI UPI VPA Handshake"
+        },
+        {
+          "id": "pm_alex_gpay",
+          "userId": "usr_alex_trader",
+          "methodName": "Google Pay (GPay)",
+          "category": "UPI_APP",
+          "fiatCurrency": "INR",
+          "accountHolder": "Alex Rivera",
+          "accountIdentifier": "alex.rivera@okhdfcbank",
+          "bankOrProvider": "Google Pay / HDFC Bank",
+          "isVerified": true,
+          "verifiedAt": "2026-10-11T14:20:00Z",
+          "verificationMethod": "NPCI UPI VPA Handshake"
+        },
+        {
+          "id": "pm_alex_paytm",
+          "userId": "usr_alex_trader",
+          "methodName": "Paytm",
+          "category": "UPI_APP",
+          "fiatCurrency": "INR",
+          "accountHolder": "Alex Rivera",
+          "accountIdentifier": "9820114490@paytm",
+          "bankOrProvider": "Paytm Payments / Axis UPI",
+          "isVerified": false
+        },
+        {
+          "id": "pm_alex_card",
+          "userId": "usr_alex_trader",
+          "methodName": "Credit / Debit Card",
+          "category": "CARD",
+          "fiatCurrency": "USD",
+          "accountHolder": "Alex Rivera",
+          "accountIdentifier": "Visa Infinite •••• 8842",
+          "bankOrProvider": "JPMorgan Chase Visa",
+          "expiryDate": "08/29",
+          "isVerified": true,
+          "verifiedAt": "2026-10-12T11:00:00Z",
+          "verificationMethod": "3DS2 $1.00 Micro-Auth Hold"
+        },
+        {
+          "id": "pm_alex_sepa",
+          "userId": "usr_alex_trader",
+          "methodName": "SEPA Instant",
+          "category": "BANK_TRANSFER",
+          "fiatCurrency": "EUR",
+          "accountHolder": "Alex Rivera",
+          "accountIdentifier": "DE89 3704 0044 0532 0130 00",
+          "bankOrProvider": "Commerzbank Frankfurt",
+          "ifscOrSwiftCode": "COBADEFFXXX",
+          "accountType": "CURRENT",
+          "branchName": "Frankfurt Main",
+          "isVerified": true,
+          "verifiedAt": "2026-09-15T16:40:00Z",
+          "verificationMethod": "IBAN Penny-Drop Verification"
+        }
+      ],
+      "bankAccounts": [
+        {
+          "id": "bank_alex_hdfc_1",
+          "userId": "usr_alex_trader",
+          "accountHolderName": "Alex Rivera",
+          "bankName": "HDFC Bank Ltd",
+          "accountNumber": "50100293849920",
+          "maskedAccountNumber": "•••• 9920",
+          "ifscOrSwiftCode": "HDFC0000124",
+          "accountType": "SAVINGS",
+          "branchName": "Nariman Point, Mumbai",
+          "fiatCurrency": "INR",
+          "linkedUpiId": "alex.rivera@okhdfcbank",
+          "isPrimary": true,
+          "isVerified": true,
+          "createdAt": "2026-10-09T11:00:00Z"
+        },
+        {
+          "id": "bank_alex_sepa_2",
+          "userId": "usr_alex_trader",
+          "accountHolderName": "Alex Rivera",
+          "bankName": "Commerzbank Frankfurt",
+          "accountNumber": "DE89370400440532013000",
+          "maskedAccountNumber": "•••• 3000",
+          "ifscOrSwiftCode": "COBADEFFXXX",
+          "accountType": "CURRENT",
+          "branchName": "Frankfurt Corporate Center",
+          "fiatCurrency": "EUR",
+          "isPrimary": false,
+          "isVerified": true,
+          "createdAt": "2026-09-15T16:40:00Z"
+        }
+      ],
+      "twoFactorEnabled": true,
+      "recoveryGuardianEmail": "security-backup@costorah.io",
+      "notificationPreferences": {
+        "tradeStarted": true,
+        "paymentReceived": true,
+        "disputeOpened": true
+      },
+      "createdAt": "2026-09-10T08:00:00Z"
+    },
+    {
+      "id": "usr_vikram_desk",
+      "displayName": "Vikram Malhotra OTC",
+      "email": "vikram@mumbai-otc.in",
+      "role": "USER",
+      "kycTier": "TIER_2_VERIFIED",
+      "reputationScore": 99.8,
+      "completedTrades": 612,
+      "completionRatePct": 99.8,
+      "wallets": [
+        {
+          "id": "wal_vikram",
+          "address": "0x94A3B88C9129E001A4421B77E89C001122334455",
+          "chain": "Arbitrum Sepolia (Chain ID 421614)",
+          "type": "EXTERNAL_SIWE",
+          "label": "Mumbai OTC Multisig",
+          "verifiedAt": "2026-08-01T12:00:00Z"
+        }
+      ],
+      "identities": [
+        {
+          "id": "id_vikram_1",
+          "provider": "GOOGLE_OAUTH",
+          "identifier": "vikram@mumbai-otc.in",
+          "linkedAt": "2026-08-01T11:55:00Z"
+        }
+      ],
+      "paymentMethods": [
+        {
+          "id": "pm_vikram_upi",
+          "userId": "usr_vikram_desk",
+          "methodName": "UPI Instant",
+          "fiatCurrency": "INR",
+          "accountHolder": "Vikram Malhotra Enterprises",
+          "accountIdentifier": "vikram.otc@icici",
+          "bankOrProvider": "ICICI Bank",
+          "isVerified": true
+        }
+      ],
+      "twoFactorEnabled": true,
+      "createdAt": "2026-08-01T11:55:00Z"
+    },
+    {
+      "id": "usr_elena_euro",
+      "displayName": "Elena Rostova Liquidity",
+      "email": "elena@zurich-digital.ch",
+      "role": "USER",
+      "kycTier": "TIER_2_VERIFIED",
+      "reputationScore": 98.9,
+      "completedTrades": 384,
+      "completionRatePct": 98.9,
+      "wallets": [
+        {
+          "id": "wal_elena",
+          "address": "0x33B1C29901A4F88D7721E0938471625344556677",
+          "chain": "Polygon Amoy Testnet",
+          "type": "EXTERNAL_SIWE",
+          "label": "Zurich Treasury Wallet",
+          "verifiedAt": "2026-08-14T09:30:00Z"
+        }
+      ],
+      "identities": [
+        {
+          "id": "id_elena_1",
+          "provider": "WALLET_SIWE",
+          "identifier": "0x33B1C29901A4F88D7721E0938471625344556677",
+          "linkedAt": "2026-08-14T09:30:00Z"
+        }
+      ],
+      "paymentMethods": [
+        {
+          "id": "pm_elena_sepa",
+          "userId": "usr_elena_euro",
+          "methodName": "SEPA Instant",
+          "fiatCurrency": "EUR",
+          "accountHolder": "Elena Rostova AG",
+          "accountIdentifier": "CH93 0076 2011 6238 5295 7",
+          "bankOrProvider": "UBS Switzerland",
+          "isVerified": true
+        }
+      ],
+      "twoFactorEnabled": true,
+      "createdAt": "2026-08-14T09:30:00Z"
+    },
+    {
+      "id": "usr_sterling_uk",
+      "displayName": "Thames Digital Markets",
+      "email": "desk@thamesdigital.co.uk",
+      "role": "USER",
+      "kycTier": "TIER_2_VERIFIED",
+      "reputationScore": 99.5,
+      "completedTrades": 509,
+      "completionRatePct": 99.5,
+      "wallets": [
+        {
+          "id": "wal_sterling",
+          "address": "0x88F1A2B3C4D5E6F708192A3B4C5D6E7F8091A2B3",
+          "chain": "Ethereum Sepolia",
+          "type": "EMBEDDED_MPC",
+          "label": "Thames Embedded Vault",
+          "verifiedAt": "2026-07-20T15:00:00Z"
+        }
+      ],
+      "identities": [],
+      "paymentMethods": [],
+      "twoFactorEnabled": true,
+      "createdAt": "2026-07-20T15:00:00Z"
+    },
+    {
+      "id": "usr_costorah_admin",
+      "displayName": "Costorah Chief Arbitrator (Admin)",
+      "email": "admin@costorah.io",
+      "avatarUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2080%2080%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22gadm%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%2280%22%20y2%3D%2280%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23059669%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230B65C6%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20rx%3D%2240%22%20fill%3D%22url(%23gadm)%22%2F%3E%3Cpath%20d%3D%22M40%2014L62%2024V40C62%2054%2052%2064%2040%2068C28%2064%2018%2054%2018%2040V24L40%2014Z%22%20fill%3D%22%23FFFFFF%22%2F%3E%3C%2Fsvg%3E",
+      "bio": "Costorah Global Escrow Arbitration, Fee Governance & Security Operations Console",
+      "countryCode": "IN",
+      "preferredFiat": "INR",
+      "role": "ADMIN",
+      "kycTier": "TIER_2_VERIFIED",
+      "reputationScore": 100,
+      "completedTrades": 0,
+      "completionRatePct": 100,
+      "wallets": [],
+      "identities": [
+        {
+          "id": "id_admin_cred",
+          "provider": "USER_CREDENTIALS",
+          "identifier": "admin",
+          "linkedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "paymentMethods": [],
+      "twoFactorEnabled": true,
+      "createdAt": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "balances": [
+    {
+      "asset": "USDT",
+      "availableMicro": 9700000000,
+      "lockedMicro": 2500000000
+    },
+    {
+      "asset": "USDC",
+      "availableMicro": 8900000000,
+      "lockedMicro": 0
+    },
+    {
+      "asset": "BTC",
+      "availableMicro": 764885,
+      "lockedMicro": 80000
+    },
+    {
+      "asset": "ETH",
+      "availableMicro": 5250000,
+      "lockedMicro": 1250000
+    },
+    {
+      "asset": "SOL",
+      "availableMicro": 87000000,
+      "lockedMicro": 8000000
+    },
+    {
+      "asset": "BNB",
+      "availableMicro": 12988571,
+      "lockedMicro": 0
+    }
+  ],
+  "offers": [
+    {
+      "id": "off_inr_usdt_98",
+      "makerId": "usr_vikram_desk",
+      "makerName": "Vikram Malhotra OTC",
+      "side": "SELL",
+      "asset": "USDT",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 9800,
+      "totalQuantityMicro": 450000000,
+      "availableQuantityMicro": 450000000,
+      "minOrderFiatMinor": 980000,
+      "maxOrderFiatMinor": 4410000,
+      "paymentMethods": [
+        "PhonePe",
+        "Google Pay (GPay)",
+        "Paytm",
+        "UPI Instant",
+        "IMPS Bank Transfer"
+      ],
+      "paymentInstructions": "Selling 450 USDT @ ₹98.00 (₹44,100.00 total). Minimum 100 USDT (₹9,800.00) per transaction via PhonePe, Google Pay, or UPI.",
+      "status": "OPEN",
+      "completedTrades": 612,
+      "completionRatePct": 99.8,
+      "createdAt": "2026-10-28T03:16:10.474Z"
+    },
+    {
+      "id": "off_inr_usdt_1",
+      "makerId": "usr_vikram_desk",
+      "makerName": "Vikram Malhotra OTC",
+      "side": "SELL",
+      "asset": "USDT",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 8650,
+      "totalQuantityMicro": 500000000,
+      "availableQuantityMicro": 384393064,
+      "minOrderFiatMinor": 865000,
+      "maxOrderFiatMinor": 4325000,
+      "paymentMethods": [
+        "PhonePe",
+        "Google Pay (GPay)",
+        "Paytm",
+        "UPI Instant",
+        "IMPS Bank Transfer"
+      ],
+      "paymentInstructions": "Send exact INR amount via PhonePe, Google Pay, or Paytm to UPI ID: vikram.otc@icici (Vikram Malhotra Enterprises). Include Order ID in remarks.",
+      "status": "OPEN",
+      "completedTrades": 612,
+      "completionRatePct": 99.8,
+      "createdAt": "2026-10-28T03:16:10.474Z"
+    },
+    {
+      "id": "off_usd_usdt_2",
+      "makerId": "usr_sterling_uk",
+      "makerName": "Thames Digital Markets",
+      "side": "SELL",
+      "asset": "USDT",
+      "fiatCurrency": "USD",
+      "unitPriceFiatMinor": 100,
+      "totalQuantityMicro": 18000000000,
+      "availableQuantityMicro": 18000000000,
+      "minOrderFiatMinor": 5000,
+      "maxOrderFiatMinor": 1000000,
+      "paymentMethods": [
+        "FedNow Instant",
+        "ACH Bank Transfer",
+        "Zelle"
+      ],
+      "paymentInstructions": "Transfer via FedNow or Zelle to treasury@thamesdigital.co.uk. Paste the 12-digit confirmation reference in the trade room.",
+      "status": "OPEN",
+      "completedTrades": 509,
+      "completionRatePct": 99.5,
+      "createdAt": "2026-10-28T03:16:10.474Z"
+    },
+    {
+      "id": "off_eur_usdc_3",
+      "makerId": "usr_elena_euro",
+      "makerName": "Elena Rostova Liquidity",
+      "side": "SELL",
+      "asset": "USDC",
+      "fiatCurrency": "EUR",
+      "unitPriceFiatMinor": 92,
+      "totalQuantityMicro": 20000000000,
+      "availableQuantityMicro": 19500000000,
+      "minOrderFiatMinor": 5000,
+      "maxOrderFiatMinor": 920000,
+      "paymentMethods": [
+        "SEPA Instant",
+        "Revolut"
+      ],
+      "paymentInstructions": "SEPA Instant transfer to IBAN CH93 0076 2011 6238 5295 7 (Elena Rostova AG). Reference: Order ID only.",
+      "status": "OPEN",
+      "completedTrades": 385,
+      "completionRatePct": 98.9,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_inr_btc_4",
+      "makerId": "usr_vikram_desk",
+      "makerName": "Vikram Malhotra OTC",
+      "side": "SELL",
+      "asset": "BTC",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 745000000,
+      "totalQuantityMicro": 1200000,
+      "availableQuantityMicro": 1200000,
+      "minOrderFiatMinor": 500000,
+      "maxOrderFiatMinor": 90041093,
+      "paymentMethods": [
+        "IMPS Bank Transfer",
+        "RTGS",
+        "NEFT"
+      ],
+      "paymentInstructions": "IMPS/RTGS to ICICI Acct 001105029812, IFSC ICIC0000011. Instant escrow release upon bank credit verification.",
+      "status": "OPEN",
+      "completedTrades": 612,
+      "completionRatePct": 99.8,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_eur_eth_5",
+      "makerId": "usr_elena_euro",
+      "makerName": "Elena Rostova Liquidity",
+      "side": "SELL",
+      "asset": "ETH",
+      "fiatCurrency": "EUR",
+      "unitPriceFiatMinor": 265000,
+      "totalQuantityMicro": 10000000,
+      "availableQuantityMicro": 10000000,
+      "minOrderFiatMinor": 10000,
+      "maxOrderFiatMinor": 1091433,
+      "paymentMethods": [
+        "SEPA Instant"
+      ],
+      "paymentInstructions": "SEPA Instant to UBS Switzerland IBAN CH93 0076 2011 6238 5295 7.",
+      "status": "OPEN",
+      "completedTrades": 384,
+      "completionRatePct": 98.9,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_gbp_sol_6",
+      "makerId": "usr_sterling_uk",
+      "makerName": "Thames Digital Markets",
+      "side": "SELL",
+      "asset": "SOL",
+      "fiatCurrency": "GBP",
+      "unitPriceFiatMinor": 14200,
+      "totalQuantityMicro": 250000000,
+      "availableQuantityMicro": 250000000,
+      "minOrderFiatMinor": 5000,
+      "maxOrderFiatMinor": 1343425,
+      "paymentMethods": [
+        "Faster Payments (FPS)",
+        "Monzo"
+      ],
+      "paymentInstructions": "UK Faster Payments Sort Code 04-00-04, Account 88291044.",
+      "status": "OPEN",
+      "completedTrades": 509,
+      "completionRatePct": 99.5,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_alex_sell_usdt",
+      "makerId": "usr_alex_trader",
+      "makerName": "Alex Rivera (You)",
+      "side": "SELL",
+      "asset": "USDT",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 8680,
+      "totalQuantityMicro": 2500000000,
+      "availableQuantityMicro": 2039170507,
+      "minOrderFiatMinor": 500000,
+      "maxOrderFiatMinor": 21700000,
+      "paymentMethods": [
+        "PhonePe",
+        "Google Pay (GPay)",
+        "UPI Instant",
+        "IMPS Bank Transfer"
+      ],
+      "paymentInstructions": "Pay via PhonePe, GPay, or UPI to alex.rivera@okhdfcbank. Provide 12-digit UTR number.",
+      "status": "OPEN",
+      "completedTrades": 148,
+      "completionRatePct": 99.4,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_alex_sell_eth",
+      "makerId": "usr_alex_trader",
+      "makerName": "Alex Rivera (You)",
+      "side": "SELL",
+      "asset": "ETH",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 22850000,
+      "totalQuantityMicro": 1250000,
+      "availableQuantityMicro": 1250000,
+      "minOrderFiatMinor": 1500000,
+      "maxOrderFiatMinor": 41130000,
+      "paymentMethods": [
+        "IMPS Bank Transfer",
+        "NEFT / RTGS",
+        "PhonePe"
+      ],
+      "paymentInstructions": "Send IMPS/NEFT or PhonePe from your verified account and enter UTR.",
+      "status": "OPEN",
+      "completedTrades": 148,
+      "completionRatePct": 99.4,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_alex_sell_btc",
+      "makerId": "usr_alex_trader",
+      "makerName": "Alex Rivera (You)",
+      "side": "SELL",
+      "asset": "BTC",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 755000000,
+      "totalQuantityMicro": 80000,
+      "availableQuantityMicro": 80000,
+      "minOrderFiatMinor": 2500000,
+      "maxOrderFiatMinor": 188750000,
+      "paymentMethods": [
+        "IMPS Bank Transfer",
+        "NEFT / RTGS"
+      ],
+      "paymentInstructions": "Instant BTC escrow release upon verified IMPS/NEFT UTR.",
+      "status": "OPEN",
+      "completedTrades": 148,
+      "completionRatePct": 99.4,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_alex_sell_sol",
+      "makerId": "usr_alex_trader",
+      "makerName": "Alex Rivera (You)",
+      "side": "SELL",
+      "asset": "SOL",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 1350000,
+      "totalQuantityMicro": 8000000,
+      "availableQuantityMicro": 8000000,
+      "minOrderFiatMinor": 500000,
+      "maxOrderFiatMinor": 10800000,
+      "paymentMethods": [
+        "PhonePe",
+        "Google Pay (GPay)",
+        "Paytm"
+      ],
+      "paymentInstructions": "Send INR via PhonePe, Google Pay, or Paytm and attach payment UTR.",
+      "status": "OPEN",
+      "completedTrades": 148,
+      "completionRatePct": 99.4,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_buy_inr_usdt_1",
+      "makerId": "usr_vikram_desk",
+      "makerName": "Vikram Malhotra OTC",
+      "side": "BUY",
+      "asset": "USDT",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 8610,
+      "totalQuantityMicro": 20000000000,
+      "availableQuantityMicro": 20000000000,
+      "minOrderFiatMinor": 500000,
+      "maxOrderFiatMinor": 86100000,
+      "paymentMethods": [
+        "UPI Instant",
+        "IMPS Bank Transfer"
+      ],
+      "paymentInstructions": "Instant INR payout via UPI or IMPS within 5 minutes of escrow lock confirmation.",
+      "status": "OPEN",
+      "completedTrades": 612,
+      "completionRatePct": 99.8,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_buy_usd_usdc_2",
+      "makerId": "usr_sterling_uk",
+      "makerName": "Thames Digital Markets",
+      "side": "BUY",
+      "asset": "USDC",
+      "fiatCurrency": "USD",
+      "unitPriceFiatMinor": 99,
+      "totalQuantityMicro": 25000000000,
+      "availableQuantityMicro": 25000000000,
+      "minOrderFiatMinor": 5000,
+      "maxOrderFiatMinor": 990000,
+      "paymentMethods": [
+        "FedNow Instant",
+        "Zelle"
+      ],
+      "paymentInstructions": "We send FedNow USD immediately once your USDC is locked in Costorah escrow.",
+      "status": "OPEN",
+      "completedTrades": 509,
+      "completionRatePct": 99.5,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_buy_eur_eth_3",
+      "makerId": "usr_elena_euro",
+      "makerName": "Elena Rostova Liquidity",
+      "side": "BUY",
+      "asset": "ETH",
+      "fiatCurrency": "EUR",
+      "unitPriceFiatMinor": 262500,
+      "totalQuantityMicro": 15000000,
+      "availableQuantityMicro": 15000000,
+      "minOrderFiatMinor": 10000,
+      "maxOrderFiatMinor": 1081137,
+      "paymentMethods": [
+        "SEPA Instant"
+      ],
+      "paymentInstructions": "Instant SEPA EUR settlement from UBS Zurich corporate account.",
+      "status": "OPEN",
+      "completedTrades": 384,
+      "completionRatePct": 98.9,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_buy_inr_btc_4",
+      "makerId": "usr_vikram_desk",
+      "makerName": "Vikram Malhotra OTC",
+      "side": "BUY",
+      "asset": "BTC",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 586470000,
+      "totalQuantityMicro": 1500000,
+      "availableQuantityMicro": 1494885,
+      "minOrderFiatMinor": 500000,
+      "maxOrderFiatMinor": 70881073,
+      "paymentMethods": [
+        "IMPS Bank Transfer",
+        "PhonePe",
+        "Google Pay (GPay)",
+        "UPI Instant",
+        "RTGS"
+      ],
+      "paymentInstructions": "Buying BTC with instant INR IMPS/UPI payout within 5 minutes of Costorah escrow lock.",
+      "status": "OPEN",
+      "completedTrades": 613,
+      "completionRatePct": 99.8,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_buy_usd_btc_5",
+      "makerId": "usr_sterling_uk",
+      "makerName": "Thames Digital Markets",
+      "side": "BUY",
+      "asset": "BTC",
+      "fiatCurrency": "USD",
+      "unitPriceFiatMinor": 6780000,
+      "totalQuantityMicro": 2000000,
+      "availableQuantityMicro": 2000000,
+      "minOrderFiatMinor": 10000,
+      "maxOrderFiatMinor": 819434,
+      "paymentMethods": [
+        "FedNow Instant",
+        "ACH Bank Transfer",
+        "Zelle"
+      ],
+      "paymentInstructions": "Instant FedNow USD settlement upon BTC escrow reservation.",
+      "status": "OPEN",
+      "completedTrades": 509,
+      "completionRatePct": 99.5,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_buy_inr_eth_6",
+      "makerId": "usr_vikram_desk",
+      "makerName": "Vikram Malhotra OTC",
+      "side": "BUY",
+      "asset": "ETH",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 22663000,
+      "totalQuantityMicro": 12000000,
+      "availableQuantityMicro": 12000000,
+      "minOrderFiatMinor": 500000,
+      "maxOrderFiatMinor": 93340198,
+      "paymentMethods": [
+        "PhonePe",
+        "Google Pay (GPay)",
+        "IMPS Bank Transfer",
+        "UPI Instant"
+      ],
+      "paymentInstructions": "Instant INR payout for ETH via verified PhonePe, GPay, or IMPS.",
+      "status": "OPEN",
+      "completedTrades": 612,
+      "completionRatePct": 99.8,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_buy_inr_sol_7",
+      "makerId": "usr_vikram_desk",
+      "makerName": "Vikram Malhotra OTC",
+      "side": "BUY",
+      "asset": "SOL",
+      "fiatCurrency": "INR",
+      "unitPriceFiatMinor": 1349400,
+      "totalQuantityMicro": 120000000,
+      "availableQuantityMicro": 120000000,
+      "minOrderFiatMinor": 200000,
+      "maxOrderFiatMinor": 127663198,
+      "paymentMethods": [
+        "PhonePe",
+        "Google Pay (GPay)",
+        "Paytm",
+        "UPI Instant"
+      ],
+      "paymentInstructions": "Instant INR UPI settlement for SOL.",
+      "status": "OPEN",
+      "completedTrades": 612,
+      "completionRatePct": 99.8,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_try_usdt_7",
+      "makerId": "usr_elena_euro",
+      "makerName": "Bosphorus OTC Liquidity",
+      "side": "SELL",
+      "asset": "USDT",
+      "fiatCurrency": "TRY",
+      "unitPriceFiatMinor": 3425,
+      "totalQuantityMicro": 12000000000,
+      "availableQuantityMicro": 12000000000,
+      "minOrderFiatMinor": 100000,
+      "maxOrderFiatMinor": 34250000,
+      "paymentMethods": [
+        "FAST Instant TRY",
+        "Papara",
+        "Ziraat Bank Transfer"
+      ],
+      "paymentInstructions": "Send TRY via CBRT FAST Instant to TR33 0001 0017 4555 2190 0050 01. Include order ID.",
+      "status": "OPEN",
+      "completedTrades": 429,
+      "completionRatePct": 99.6,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_irr_usdt_8",
+      "makerId": "usr_vikram_desk",
+      "makerName": "Caspian Settlement Desk",
+      "side": "SELL",
+      "asset": "USDT",
+      "fiatCurrency": "IRR",
+      "unitPriceFiatMinor": 4200000,
+      "totalQuantityMicro": 8000000000,
+      "availableQuantityMicro": 8000000000,
+      "minOrderFiatMinor": 50000000,
+      "maxOrderFiatMinor": 33600000000,
+      "paymentMethods": [
+        "Shetab Card-to-Card",
+        "Satna / Paya Bank Rail"
+      ],
+      "paymentInstructions": "Remit IRR via Shetab or Satna domestic rail and upload 16-digit receipt reference.",
+      "status": "OPEN",
+      "completedTrades": 310,
+      "completionRatePct": 99.1,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_ngn_usdt_9",
+      "makerId": "usr_sterling_uk",
+      "makerName": "Lagos Prime Liquidity",
+      "side": "SELL",
+      "asset": "USDT",
+      "fiatCurrency": "NGN",
+      "unitPriceFiatMinor": 162000,
+      "totalQuantityMicro": 15000000000,
+      "availableQuantityMicro": 15000000000,
+      "minOrderFiatMinor": 2000000,
+      "maxOrderFiatMinor": 1620000000,
+      "paymentMethods": [
+        "NIP Instant Transfer",
+        "OPay",
+        "PalmPay",
+        "Kuda Bank"
+      ],
+      "paymentInstructions": "Send NGN via NIBSS Instant Payment (NIP) or OPay and paste session ID.",
+      "status": "OPEN",
+      "completedTrades": 540,
+      "completionRatePct": 99.7,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_brl_usdt_10",
+      "makerId": "usr_sterling_uk",
+      "makerName": "São Paulo Pix Desk",
+      "side": "SELL",
+      "asset": "USDT",
+      "fiatCurrency": "BRL",
+      "unitPriceFiatMinor": 575,
+      "totalQuantityMicro": 10000000000,
+      "availableQuantityMicro": 10000000000,
+      "minOrderFiatMinor": 10000,
+      "maxOrderFiatMinor": 5750000,
+      "paymentMethods": [
+        "Pix Instant",
+        "Nubank",
+        "Itaú Transfer"
+      ],
+      "paymentInstructions": "Instant Pix settlement via CNPJ key. Attach Banco Central EndToEndId.",
+      "status": "OPEN",
+      "completedTrades": 488,
+      "completionRatePct": 99.5,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_aed_usdt_11",
+      "makerId": "usr_vikram_desk",
+      "makerName": "DIFC Emirates Liquidity",
+      "side": "SELL",
+      "asset": "USDT",
+      "fiatCurrency": "AED",
+      "unitPriceFiatMinor": 367,
+      "totalQuantityMicro": 15000000000,
+      "availableQuantityMicro": 15000000000,
+      "minOrderFiatMinor": 10000,
+      "maxOrderFiatMinor": 3670000,
+      "paymentMethods": [
+        "UAEFTS Instant",
+        "Wio Bank",
+        "Emirates NBD"
+      ],
+      "paymentInstructions": "Transfer AED via UAEFTS or Wio Bank Instant to AE07 0331 2345 6789 0123 456.",
+      "status": "OPEN",
+      "completedTrades": 612,
+      "completionRatePct": 99.9,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "id": "off_vnd_usdt_12",
+      "makerId": "usr_elena_euro",
+      "makerName": "Saigon Napas247 Desk",
+      "side": "SELL",
+      "asset": "USDT",
+      "fiatCurrency": "VND",
+      "unitPriceFiatMinor": 2540000,
+      "totalQuantityMicro": 10000000000,
+      "availableQuantityMicro": 10000000000,
+      "minOrderFiatMinor": 50000000,
+      "maxOrderFiatMinor": 25400000000,
+      "paymentMethods": [
+        "VietQR Napas247",
+        "MoMo Wallet",
+        "Vietcombank"
+      ],
+      "paymentInstructions": "Scan VietQR Napas247 Vietcombank and enter exact order reference.",
+      "status": "OPEN",
+      "completedTrades": 395,
+      "completionRatePct": 99.4,
+      "createdAt": "2026-10-28T03:16:10.475Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord_active_1001",
+      "offerId": "off_inr_usdt_1",
+      "buyerId": "usr_alex_trader",
+      "sellerId": "usr_vikram_desk",
+      "asset": "USDT",
+      "fiatCurrency": "INR",
+      "cryptoQuantityMicro": 115606936,
+      "grossFiatMinor": 1000000,
+      "platformFeeFiatMinor": 10000,
+      "sellerNetFiatMinor": 990000,
+      "platformFeeCryptoMicro": 1156069,
+      "unitPriceFiatMinor": 8650,
+      "state": "PAYMENT_PENDING",
+      "paymentMethod": "UPI Instant",
+      "buyerNetCryptoMicro": 115606936,
+      "paymentWindowSeconds": 1800,
+      "expiresAt": "2026-10-28T03:46:10.476Z",
+      "createdAt": "2026-10-28T03:16:10.476Z",
+      "updatedAt": "2026-10-28T03:16:10.476Z"
+    },
+    {
+      "id": "ord_sent_1004",
+      "offerId": "off_alex_sell_usdt",
+      "buyerId": "usr_vikram_desk",
+      "sellerId": "usr_alex_trader",
+      "asset": "USDT",
+      "fiatCurrency": "INR",
+      "cryptoQuantityMicro": 172811060,
+      "grossFiatMinor": 1500000,
+      "platformFeeFiatMinor": 15000,
+      "sellerNetFiatMinor": 1485000,
+      "platformFeeCryptoMicro": 1728111,
+      "unitPriceFiatMinor": 8680,
+      "state": "PAYMENT_MARKED_SENT",
+      "paymentMethod": "PhonePe",
+      "buyerNetCryptoMicro": 172811060,
+      "paymentWindowSeconds": 1800,
+      "expiresAt": "2026-10-28T03:46:10.476Z",
+      "createdAt": "2026-10-28T03:16:10.476Z",
+      "updatedAt": "2026-10-28T03:16:10.476Z",
+      "paymentReference": "PhonePe-UTR-418920331902",
+      "paymentEvidenceUrl": "receipt://phonepe-utr-418920331902.png",
+      "paymentDeclaredAt": "2026-10-28T03:16:10.476Z"
+    },
+    {
+      "id": "ord_done_1002",
+      "offerId": "off_eur_usdc_3",
+      "buyerId": "usr_alex_trader",
+      "sellerId": "usr_elena_euro",
+      "asset": "USDC",
+      "fiatCurrency": "EUR",
+      "cryptoQuantityMicro": 500000000,
+      "grossFiatMinor": 46000,
+      "platformFeeFiatMinor": 460,
+      "sellerNetFiatMinor": 45540,
+      "platformFeeCryptoMicro": 5000000,
+      "unitPriceFiatMinor": 92,
+      "state": "COMPLETED",
+      "paymentMethod": "SEPA Instant",
+      "buyerNetCryptoMicro": 500000000,
+      "paymentWindowSeconds": 1800,
+      "expiresAt": "2026-10-28T03:46:10.476Z",
+      "createdAt": "2026-10-28T03:16:10.476Z",
+      "updatedAt": "2026-10-28T03:16:10.476Z",
+      "paymentReference": "SEPA-DE89-88492011",
+      "paymentEvidenceUrl": "receipt://sepa-instant-88492011.pdf",
+      "paymentDeclaredAt": "2026-10-28T03:16:10.476Z",
+      "settlementTxHash": "0x61656769735f736574746c655f6f72645f646f6e655f31303032aaaaaaaaaaaa"
+    },
+    {
+      "id": "ord_disp_1003",
+      "offerId": "off_alex_sell_usdt",
+      "buyerId": "usr_sterling_uk",
+      "sellerId": "usr_alex_trader",
+      "asset": "USDT",
+      "fiatCurrency": "INR",
+      "cryptoQuantityMicro": 288018433,
+      "grossFiatMinor": 2500000,
+      "platformFeeFiatMinor": 25000,
+      "sellerNetFiatMinor": 2475000,
+      "platformFeeCryptoMicro": 2880184,
+      "unitPriceFiatMinor": 8680,
+      "state": "DISPUTED",
+      "paymentMethod": "IMPS Bank Transfer",
+      "buyerNetCryptoMicro": 288018433,
+      "paymentWindowSeconds": 1800,
+      "expiresAt": "2026-10-28T03:46:10.476Z",
+      "createdAt": "2026-10-28T03:16:10.476Z",
+      "updatedAt": "2026-10-28T03:16:10.477Z",
+      "paymentReference": "IMPS-991028341100",
+      "paymentEvidenceUrl": "receipt://imps-statement-991028341100.png",
+      "paymentDeclaredAt": "2026-10-28T03:16:10.476Z",
+      "disputeReason": "Buyer marked ₹25,000 IMPS sent, but UTR 991028341100 shows pending clearing at beneficiary bank. Requesting escrow hold until NEFT/IMPS batch confirmation.",
+      "disputeOpenedBy": "usr_alex_trader"
+    },
+    {
+      "id": "ord_done_btc_1005",
+      "offerId": "off_buy_inr_btc_4",
+      "buyerId": "usr_vikram_desk",
+      "sellerId": "usr_alex_trader",
+      "asset": "BTC",
+      "fiatCurrency": "INR",
+      "cryptoQuantityMicro": 5115,
+      "grossFiatMinor": 3000000,
+      "platformFeeFiatMinor": 30000,
+      "sellerNetFiatMinor": 2970000,
+      "platformFeeCryptoMicro": 51,
+      "unitPriceFiatMinor": 586470000,
+      "state": "COMPLETED",
+      "paymentMethod": "IMPS Bank Transfer",
+      "buyerNetCryptoMicro": 5115,
+      "paymentWindowSeconds": 1800,
+      "expiresAt": "2026-10-28T03:46:10.477Z",
+      "createdAt": "2026-10-28T03:16:10.477Z",
+      "updatedAt": "2026-10-28T03:16:10.477Z",
+      "paymentReference": "IMPS-HDFC-7748291038",
+      "paymentEvidenceUrl": "receipt://imps-hdfc-7748291038.pdf",
+      "paymentDeclaredAt": "2026-10-28T03:16:10.477Z",
+      "settlementTxHash": "0x61656769735f736574746c655f6f72645f646f6e655f6274635f31303035aaaa"
+    }
+  ],
+  "messages": {
+    "ord_active_1001": [
+      {
+        "id": "msg_1",
+        "orderId": "ord_active_1001",
+        "senderId": "SYSTEM",
+        "senderName": "Costorah Escrow Engine",
+        "senderRole": "SYSTEM",
+        "content": "Escrow locked: 115.606936 USDT is cryptographically reserved. Buyer may now remit ₹10,000.00 via UPI Instant.",
+        "createdAt": "2026-10-28T03:06:10.476Z"
+      },
+      {
+        "id": "msg_2",
+        "orderId": "ord_active_1001",
+        "senderId": "usr_vikram_desk",
+        "senderName": "Vikram Malhotra OTC",
+        "senderRole": "SELLER",
+        "content": "Hello Alex! Online now. Please send ₹10,000.00 to vikram.otc@icici and submit the 12-digit UTR reference.",
+        "createdAt": "2026-10-28T03:07:10.476Z"
+      }
+    ],
+    "ord_sent_1004": [
+      {
+        "id": "msg_s1",
+        "orderId": "ord_sent_1004",
+        "senderId": "SYSTEM",
+        "senderName": "Costorah Escrow Engine",
+        "senderRole": "SYSTEM",
+        "content": "Buyer submitted payment proof (PhonePe-UTR-418920331902) for ₹15,000.00. Auto-expiry timer is now frozen while Seller verifies bank credit.",
+        "createdAt": "2026-10-28T03:11:10.476Z"
+      }
+    ],
+    "ord_done_1002": [
+      {
+        "id": "msg_c1",
+        "orderId": "ord_done_1002",
+        "senderId": "SYSTEM",
+        "senderName": "Costorah Escrow Engine",
+        "senderRole": "SYSTEM",
+        "content": "Settlement finalized. Escrow released 500.000000 USDC to Buyer.",
+        "createdAt": "2026-10-28T02:16:10.476Z"
+      }
+    ],
+    "ord_disp_1003": [
+      {
+        "id": "msg_d1",
+        "orderId": "ord_disp_1003",
+        "senderId": "SYSTEM",
+        "senderName": "Costorah Arbitration Engine",
+        "senderRole": "SYSTEM",
+        "content": "DISPUTE OPENED: Order frozen in escrow. Neither release nor expiry can occur until an authorized arbitrator records a settlement ruling.",
+        "createdAt": "2026-10-28T02:46:10.477Z"
+      }
+    ],
+    "ord_done_btc_1005": [
+      {
+        "id": "msg_btc_1",
+        "orderId": "ord_done_btc_1005",
+        "senderId": "SYSTEM",
+        "senderName": "Costorah Escrow Engine",
+        "senderRole": "SYSTEM",
+        "content": "BTC Self-Sell Order Settled: Escrowed BTC released after verifying ₹30,000.00 IMPS credit to HDFC Bank •••• 9920.",
+        "createdAt": "2026-10-28T01:46:10.477Z"
+      }
+    ]
+  },
+  "ledgerEntries": [
+    {
+      "userId": "usr_alex_trader",
+      "asset": "BTC",
+      "type": "PLATFORM_FEE_CREDIT",
+      "deltaAvailableMicro": 0,
+      "deltaLockedMicro": 0,
+      "referenceId": "ord_done_btc_1005",
+      "idempotencyKey": "seed_release_1005_fee_credit",
+      "note": "Platform escrow fee (1.00%): 300.00 INR settled on order ord_done_btc_1005",
+      "id": "led_45_1793157370477",
+      "timestamp": "2026-10-28T03:16:10.477Z"
+    },
+    {
+      "userId": "usr_vikram_desk",
+      "asset": "BTC",
+      "type": "ESCROW_RELEASE_TO_BUYER",
+      "deltaAvailableMicro": 5115,
+      "deltaLockedMicro": 0,
+      "referenceId": "ord_done_btc_1005",
+      "idempotencyKey": "seed_release_1005_buyer",
+      "note": "Credited 100% escrowed crypto (0.005115 BTC) from order ord_done_btc_1005",
+      "id": "led_44_1793157370477",
+      "timestamp": "2026-10-28T03:16:10.477Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "BTC",
+      "type": "ESCROW_RELEASE_TO_BUYER",
+      "deltaAvailableMicro": 0,
+      "deltaLockedMicro": -5115,
+      "referenceId": "ord_done_btc_1005",
+      "idempotencyKey": "seed_release_1005_seller",
+      "note": "Released 0.005115 BTC from seller escrow for order ord_done_btc_1005",
+      "id": "led_43_1793157370477",
+      "timestamp": "2026-10-28T03:16:10.477Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "BTC",
+      "type": "ESCROW_LOCK",
+      "deltaAvailableMicro": -5115,
+      "deltaLockedMicro": 5115,
+      "referenceId": "ord_done_btc_1005",
+      "idempotencyKey": "lock_seed_ord_1005",
+      "note": "Locked 0.005115 BTC into escrow for order ord_done_btc_1005",
+      "id": "led_42_1793157370477",
+      "timestamp": "2026-10-28T03:16:10.477Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "USDT",
+      "type": "ESCROW_LOCK",
+      "deltaAvailableMicro": 0,
+      "deltaLockedMicro": 0,
+      "referenceId": "ord_disp_1003",
+      "idempotencyKey": "lock_seed_ord_1003",
+      "note": "Allocated 288.018433 USDT from offer reserve to active escrow order ord_disp_1003",
+      "id": "led_41_1793157370476",
+      "timestamp": "2026-10-28T03:16:10.476Z"
+    },
+    {
+      "userId": "usr_elena_euro",
+      "asset": "USDC",
+      "type": "PLATFORM_FEE_CREDIT",
+      "deltaAvailableMicro": 0,
+      "deltaLockedMicro": 0,
+      "referenceId": "ord_done_1002",
+      "idempotencyKey": "seed_release_1002_fee_credit",
+      "note": "Platform escrow fee (1.00%): 4.60 EUR settled on order ord_done_1002",
+      "id": "led_40_1793157370476",
+      "timestamp": "2026-10-28T03:16:10.476Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "USDC",
+      "type": "ESCROW_RELEASE_TO_BUYER",
+      "deltaAvailableMicro": 500000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "ord_done_1002",
+      "idempotencyKey": "seed_release_1002_buyer",
+      "note": "Credited 100% escrowed crypto (500.000000 USDC) from order ord_done_1002",
+      "id": "led_39_1793157370476",
+      "timestamp": "2026-10-28T03:16:10.476Z"
+    },
+    {
+      "userId": "usr_elena_euro",
+      "asset": "USDC",
+      "type": "ESCROW_RELEASE_TO_BUYER",
+      "deltaAvailableMicro": 0,
+      "deltaLockedMicro": -500000000,
+      "referenceId": "ord_done_1002",
+      "idempotencyKey": "seed_release_1002_seller",
+      "note": "Released 500.000000 USDC from seller escrow for order ord_done_1002",
+      "id": "led_38_1793157370476",
+      "timestamp": "2026-10-28T03:16:10.476Z"
+    },
+    {
+      "userId": "usr_elena_euro",
+      "asset": "USDC",
+      "type": "ESCROW_LOCK",
+      "deltaAvailableMicro": 0,
+      "deltaLockedMicro": 0,
+      "referenceId": "ord_done_1002",
+      "idempotencyKey": "lock_seed_ord_1002",
+      "note": "Allocated 500.000000 USDC from offer reserve to active escrow order ord_done_1002",
+      "id": "led_37_1793157370476",
+      "timestamp": "2026-10-28T03:16:10.476Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "USDT",
+      "type": "ESCROW_LOCK",
+      "deltaAvailableMicro": 0,
+      "deltaLockedMicro": 0,
+      "referenceId": "ord_sent_1004",
+      "idempotencyKey": "lock_seed_ord_1004",
+      "note": "Allocated 172.811060 USDT from offer reserve to active escrow order ord_sent_1004",
+      "id": "led_36_1793157370476",
+      "timestamp": "2026-10-28T03:16:10.476Z"
+    },
+    {
+      "userId": "usr_vikram_desk",
+      "asset": "USDT",
+      "type": "ESCROW_LOCK",
+      "deltaAvailableMicro": 0,
+      "deltaLockedMicro": 0,
+      "referenceId": "ord_active_1001",
+      "idempotencyKey": "lock_seed_ord_1001",
+      "note": "Allocated 115.606936 USDT from offer reserve to active escrow order ord_active_1001",
+      "id": "led_35_1793157370476",
+      "timestamp": "2026-10-28T03:16:10.476Z"
+    },
+    {
+      "userId": "usr_elena_euro",
+      "asset": "USDT",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -10000000000,
+      "deltaLockedMicro": 10000000000,
+      "referenceId": "off_vnd_usdt_12",
+      "idempotencyKey": "offer_create_off_vnd_usdt_12",
+      "note": "Reserved 10000.000000 USDT for SELL offer off_vnd_usdt_12",
+      "id": "led_34_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_vikram_desk",
+      "asset": "USDT",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -15000000000,
+      "deltaLockedMicro": 15000000000,
+      "referenceId": "off_aed_usdt_11",
+      "idempotencyKey": "offer_create_off_aed_usdt_11",
+      "note": "Reserved 15000.000000 USDT for SELL offer off_aed_usdt_11",
+      "id": "led_33_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_sterling_uk",
+      "asset": "USDT",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -10000000000,
+      "deltaLockedMicro": 10000000000,
+      "referenceId": "off_brl_usdt_10",
+      "idempotencyKey": "offer_create_off_brl_usdt_10",
+      "note": "Reserved 10000.000000 USDT for SELL offer off_brl_usdt_10",
+      "id": "led_32_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_sterling_uk",
+      "asset": "USDT",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -15000000000,
+      "deltaLockedMicro": 15000000000,
+      "referenceId": "off_ngn_usdt_9",
+      "idempotencyKey": "offer_create_off_ngn_usdt_9",
+      "note": "Reserved 15000.000000 USDT for SELL offer off_ngn_usdt_9",
+      "id": "led_31_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_vikram_desk",
+      "asset": "USDT",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -8000000000,
+      "deltaLockedMicro": 8000000000,
+      "referenceId": "off_irr_usdt_8",
+      "idempotencyKey": "offer_create_off_irr_usdt_8",
+      "note": "Reserved 8000.000000 USDT for SELL offer off_irr_usdt_8",
+      "id": "led_30_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_elena_euro",
+      "asset": "USDT",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -12000000000,
+      "deltaLockedMicro": 12000000000,
+      "referenceId": "off_try_usdt_7",
+      "idempotencyKey": "offer_create_off_try_usdt_7",
+      "note": "Reserved 12000.000000 USDT for SELL offer off_try_usdt_7",
+      "id": "led_29_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "SOL",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -8000000,
+      "deltaLockedMicro": 8000000,
+      "referenceId": "off_alex_sell_sol",
+      "idempotencyKey": "offer_create_off_alex_sell_sol",
+      "note": "Reserved 8.000000 SOL for SELL offer off_alex_sell_sol",
+      "id": "led_28_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "BTC",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -80000,
+      "deltaLockedMicro": 80000,
+      "referenceId": "off_alex_sell_btc",
+      "idempotencyKey": "offer_create_off_alex_sell_btc",
+      "note": "Reserved 0.080000 BTC for SELL offer off_alex_sell_btc",
+      "id": "led_27_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "ETH",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -1250000,
+      "deltaLockedMicro": 1250000,
+      "referenceId": "off_alex_sell_eth",
+      "idempotencyKey": "offer_create_off_alex_sell_eth",
+      "note": "Reserved 1.250000 ETH for SELL offer off_alex_sell_eth",
+      "id": "led_26_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "USDT",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -2500000000,
+      "deltaLockedMicro": 2500000000,
+      "referenceId": "off_alex_sell_usdt",
+      "idempotencyKey": "offer_create_off_alex_sell_usdt",
+      "note": "Reserved 2500.000000 USDT for SELL offer off_alex_sell_usdt",
+      "id": "led_25_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_sterling_uk",
+      "asset": "SOL",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -250000000,
+      "deltaLockedMicro": 250000000,
+      "referenceId": "off_gbp_sol_6",
+      "idempotencyKey": "offer_create_off_gbp_sol_6",
+      "note": "Reserved 250.000000 SOL for SELL offer off_gbp_sol_6",
+      "id": "led_24_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_elena_euro",
+      "asset": "ETH",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -10000000,
+      "deltaLockedMicro": 10000000,
+      "referenceId": "off_eur_eth_5",
+      "idempotencyKey": "offer_create_off_eur_eth_5",
+      "note": "Reserved 10.000000 ETH for SELL offer off_eur_eth_5",
+      "id": "led_23_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_vikram_desk",
+      "asset": "BTC",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -1200000,
+      "deltaLockedMicro": 1200000,
+      "referenceId": "off_inr_btc_4",
+      "idempotencyKey": "offer_create_off_inr_btc_4",
+      "note": "Reserved 1.200000 BTC for SELL offer off_inr_btc_4",
+      "id": "led_22_1793157370475",
+      "timestamp": "2026-10-28T03:16:10.475Z"
+    },
+    {
+      "userId": "usr_elena_euro",
+      "asset": "USDC",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -20000000000,
+      "deltaLockedMicro": 20000000000,
+      "referenceId": "off_eur_usdc_3",
+      "idempotencyKey": "offer_create_off_eur_usdc_3",
+      "note": "Reserved 20000.000000 USDC for SELL offer off_eur_usdc_3",
+      "id": "led_21_1793157370474",
+      "timestamp": "2026-10-28T03:16:10.474Z"
+    },
+    {
+      "userId": "usr_sterling_uk",
+      "asset": "USDT",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -18000000000,
+      "deltaLockedMicro": 18000000000,
+      "referenceId": "off_usd_usdt_2",
+      "idempotencyKey": "offer_create_off_usd_usdt_2",
+      "note": "Reserved 18000.000000 USDT for SELL offer off_usd_usdt_2",
+      "id": "led_20_1793157370474",
+      "timestamp": "2026-10-28T03:16:10.474Z"
+    },
+    {
+      "userId": "usr_vikram_desk",
+      "asset": "USDT",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -500000000,
+      "deltaLockedMicro": 500000000,
+      "referenceId": "off_inr_usdt_1",
+      "idempotencyKey": "offer_create_off_inr_usdt_1",
+      "note": "Reserved 500.000000 USDT for SELL offer off_inr_usdt_1",
+      "id": "led_19_1793157370474",
+      "timestamp": "2026-10-28T03:16:10.474Z"
+    },
+    {
+      "userId": "usr_vikram_desk",
+      "asset": "USDT",
+      "type": "OFFER_RESERVE",
+      "deltaAvailableMicro": -450000000,
+      "deltaLockedMicro": 450000000,
+      "referenceId": "off_inr_usdt_98",
+      "idempotencyKey": "offer_create_off_inr_usdt_98",
+      "note": "Reserved 450.000000 USDT for SELL offer off_inr_usdt_98",
+      "id": "led_18_1793157370474",
+      "timestamp": "2026-10-28T03:16:10.474Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "BNB",
+      "type": "SWAP_CREDIT",
+      "deltaAvailableMicro": 488571,
+      "deltaLockedMicro": 0,
+      "referenceId": "swp_mvrjlm5m_65e1",
+      "idempotencyKey": "seed_swap_alex_bnb_1_credit",
+      "note": "Credited 0.488571 BNB from USDT swap on BNB Smart Chain (BEP-20)",
+      "id": "led_17_1793157370474",
+      "timestamp": "2026-10-28T03:16:10.474Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "USDT",
+      "type": "SWAP_DEBIT",
+      "deltaAvailableMicro": -300000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "swp_mvrjlm5m_65e1",
+      "idempotencyKey": "seed_swap_alex_bnb_1_debit",
+      "note": "Swapped 300.000000 USDT → 0.488571 BNB on BNB Smart Chain (BEP-20)",
+      "id": "led_16_1793157370474",
+      "timestamp": "2026-10-28T03:16:10.474Z"
+    },
+    {
+      "userId": "usr_sterling_uk",
+      "asset": "BNB",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 30000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_sterling_bnb",
+      "idempotencyKey": "seed_dep_sterling_bnb",
+      "note": "Deposited 30.000000 BNB",
+      "id": "led_15_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_sterling_uk",
+      "asset": "SOL",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 400000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_sterling_sol",
+      "idempotencyKey": "seed_dep_sterling_sol",
+      "note": "Deposited 400.000000 SOL",
+      "id": "led_14_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_sterling_uk",
+      "asset": "USDT",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 85000000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_sterling_usdt",
+      "idempotencyKey": "seed_dep_sterling_usdt",
+      "note": "Deposited 85000.000000 USDT",
+      "id": "led_13_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_elena_euro",
+      "asset": "ETH",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 18000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_elena_eth",
+      "idempotencyKey": "seed_dep_elena_eth",
+      "note": "Deposited 18.000000 ETH",
+      "id": "led_12_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_elena_euro",
+      "asset": "USDC",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 60000000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_elena_usdc",
+      "idempotencyKey": "seed_dep_elena_usdc",
+      "note": "Deposited 60000.000000 USDC",
+      "id": "led_11_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_elena_euro",
+      "asset": "USDT",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 50000000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_elena_usdt",
+      "idempotencyKey": "seed_dep_elena_usdt",
+      "note": "Deposited 50000.000000 USDT",
+      "id": "led_10_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_vikram_desk",
+      "asset": "BNB",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 45000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_vikram_bnb",
+      "idempotencyKey": "seed_dep_vikram_bnb",
+      "note": "Deposited 45.000000 BNB",
+      "id": "led_9_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_vikram_desk",
+      "asset": "BTC",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 2500000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_vikram_btc",
+      "idempotencyKey": "seed_dep_vikram_btc",
+      "note": "Deposited 2.500000 BTC",
+      "id": "led_8_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_vikram_desk",
+      "asset": "USDT",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 95000000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_vikram_usdt",
+      "idempotencyKey": "seed_dep_vikram_usdt",
+      "note": "Deposited 95000.000000 USDT",
+      "id": "led_7_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "SOL",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 95000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_alex_sol",
+      "idempotencyKey": "seed_dep_alex_sol",
+      "note": "Deposited 95.000000 SOL",
+      "id": "led_6_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "BNB",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 12500000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_alex_bnb",
+      "idempotencyKey": "seed_dep_alex_bnb",
+      "note": "Deposited 12.500000 BNB",
+      "id": "led_5_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "ETH",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 6500000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_alex_eth",
+      "idempotencyKey": "seed_dep_alex_eth",
+      "note": "Deposited 6.500000 ETH",
+      "id": "led_4_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "BTC",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 850000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_alex_btc",
+      "idempotencyKey": "seed_dep_alex_btc",
+      "note": "Deposited 0.850000 BTC",
+      "id": "led_3_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "USDC",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 8400000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_alex_usdc",
+      "idempotencyKey": "seed_dep_alex_usdc",
+      "note": "Deposited 8400.000000 USDC",
+      "id": "led_2_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    },
+    {
+      "userId": "usr_alex_trader",
+      "asset": "USDT",
+      "type": "DEPOSIT",
+      "deltaAvailableMicro": 12500000000,
+      "deltaLockedMicro": 0,
+      "referenceId": "seed_dep_alex_usdt",
+      "idempotencyKey": "seed_dep_alex_usdt",
+      "note": "Deposited 12500.000000 USDT",
+      "id": "led_1_1793157370473",
+      "timestamp": "2026-10-28T03:16:10.473Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "aud_1793157370477_yaqm",
+      "timestamp": "2026-10-28T03:16:10.477Z",
+      "actorId": "SYSTEM_ALERT_WORKER",
+      "actorRole": "SYSTEM",
+      "action": "PRICE_ALERT_TRIGGERED",
+      "targetType": "ALERT",
+      "targetId": "alert_seed_2",
+      "details": "[INITIAL_BOOT_SCAN] Triggered BTC/INR alert (EMAIL) at 5864700.00 INR via offer off_buy_inr_btc_4",
+      "ipHash": "sha256:9f86d081884c7d659a2feaa0c55ad015"
+    },
+    {
+      "id": "aud_1793157370477_8z61",
+      "timestamp": "2026-10-28T03:16:10.477Z",
+      "actorId": "SYSTEM_ALERT_WORKER",
+      "actorRole": "SYSTEM",
+      "action": "PRICE_ALERT_TRIGGERED",
+      "targetType": "ALERT",
+      "targetId": "alert_seed_1",
+      "details": "[INITIAL_BOOT_SCAN] Triggered USDT/INR alert (BOTH) at 86.50 INR via offer off_inr_usdt_1",
+      "ipHash": "sha256:9f86d081884c7d659a2feaa0c55ad015"
+    },
+    {
+      "id": "aud_1793157370477_6ano",
+      "timestamp": "2026-10-28T03:16:10.477Z",
+      "actorId": "usr_alex_trader",
+      "actorRole": "SELLER",
+      "action": "DISPUTE_OPENED_ESCROW_FROZEN",
+      "targetType": "DISPUTE",
+      "targetId": "ord_disp_1003",
+      "details": "Escrow frozen on ord_disp_1003 pending IMPS UTR 991028341100 verification",
+      "ipHash": "sha256:9f86d081884c7d659a2feaa0c55ad015"
+    },
+    {
+      "id": "aud_1793157370477_u77w",
+      "timestamp": "2026-10-28T03:16:10.477Z",
+      "actorId": "usr_elena_euro",
+      "actorRole": "SELLER",
+      "action": "ESCROW_RELEASE_COMPLETED",
+      "targetType": "ORDER",
+      "targetId": "ord_done_1002",
+      "details": "Verified SEPA-DE89-88492011 and released 500.000000 USDC to usr_alex_trader",
+      "ipHash": "sha256:9f86d081884c7d659a2feaa0c55ad015"
+    },
+    {
+      "id": "aud_1793157370477_5ocx",
+      "timestamp": "2026-10-28T03:16:10.477Z",
+      "actorId": "usr_alex_trader",
+      "actorRole": "BUYER",
+      "action": "ORDER_ESCROW_LOCKED",
+      "targetType": "ORDER",
+      "targetId": "ord_active_1001",
+      "details": "Reserved 115.606936 USDT for ₹10,000.00 trade (1% fee = ₹100.00, Seller net = ₹9,900.00)",
+      "ipHash": "sha256:9f86d081884c7d659a2feaa0c55ad015"
+    },
+    {
+      "id": "aud_1793157370477_v1eo",
+      "timestamp": "2026-10-28T03:16:10.477Z",
+      "actorId": "usr_vikram_desk",
+      "actorRole": "USER",
+      "action": "OFFER_CREATED_INVENTORY_LOCKED",
+      "targetType": "OFFER",
+      "targetId": "off_inr_usdt_1",
+      "details": "Locked 15,000.000000 USDT in escrow reserve for SELL offer off_inr_usdt_1",
+      "ipHash": "sha256:9f86d081884c7d659a2feaa0c55ad015"
+    },
+    {
+      "id": "aud_1793157370477_j2pp",
+      "timestamp": "2026-10-28T03:16:10.477Z",
+      "actorId": "usr_alex_trader",
+      "actorRole": "USER",
+      "action": "WALLET_SIWE_VERIFIED",
+      "targetType": "WALLET",
+      "targetId": "wal_1",
+      "details": "Verified SIWE challenge signature on Arbitrum Sepolia (0x71C9...292e)",
+      "ipHash": "sha256:9f86d081884c7d659a2feaa0c55ad015"
+    }
+  ],
+  "incidents": [
+    {
+      "id": "inc_101",
+      "title": "Delayed IMPS Interbank Settlement Window (NPCI Maintenance Notice)",
+      "severity": "LOW",
+      "status": "INVESTIGATING",
+      "createdAt": "2026-10-28T01:16:10.477Z",
+      "notes": "Monitoring interbank UTR clearing latency for INR rails; automatic expiry timers remain suspended for all PAYMENT_MARKED_SENT orders."
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif_1793157370477_2myg",
+      "userId": "usr_alex_trader",
+      "title": "Price Alert Triggered: BTC/INR @ 5864700.00",
+      "message": "Your ≤ 7350000.00 INR alert matched Offer off_buy_inr_btc_4 at 5864700.00 INR (Email dispatched to alex.rivera@costorah.io).",
+      "channel": "EMAIL",
+      "read": false,
+      "createdAt": "2026-10-28T03:16:10.477Z"
+    },
+    {
+      "id": "notif_1793157370477_xjzs",
+      "userId": "usr_alex_trader",
+      "title": "Price Alert Triggered: USDT/INR @ 86.50",
+      "message": "Your ≤ 86.60 INR alert matched Offer off_inr_usdt_1 at 86.50 INR (Dispatched to alex.rivera@costorah.io + In-App Alert).",
+      "channel": "BOTH",
+      "read": false,
+      "createdAt": "2026-10-28T03:16:10.477Z"
+    },
+    {
+      "id": "notif_1793157370477_60og",
+      "userId": "usr_alex_trader",
+      "title": "Dispute Frozen in Escrow",
+      "message": "Order ord_disp_1003 (288.018433 USDT) is locked under dispute arbitration.",
+      "orderId": "ord_disp_1003",
+      "channel": "IN_APP",
+      "read": false,
+      "createdAt": "2026-10-28T03:16:10.477Z"
+    },
+    {
+      "id": "notif_1793157370477_7n6r",
+      "userId": "usr_alex_trader",
+      "title": "Escrow Locked — Action Required",
+      "message": "Order ord_active_1001 has 115.606936 USDT locked in escrow. Remit ₹10,000.00 via UPI Instant and submit your UTR.",
+      "orderId": "ord_active_1001",
+      "channel": "IN_APP",
+      "read": false,
+      "createdAt": "2026-10-28T03:16:10.477Z"
+    }
+  ],
+  "priceAlerts": [
+    {
+      "id": "alert_seed_1",
+      "userId": "usr_alex_trader",
+      "userEmail": "alex.rivera@costorah.io",
+      "asset": "USDT",
+      "fiatCurrency": "INR",
+      "direction": "AT_OR_BELOW",
+      "targetPriceFiatMinor": 8660,
+      "channel": "BOTH",
+      "status": "TRIGGERED",
+      "createdAt": "2026-10-28T02:56:10.477Z",
+      "triggeredAt": "2026-10-28T03:16:10.477Z",
+      "triggeredOfferId": "off_inr_usdt_1",
+      "triggeredPriceFiatMinor": 8650,
+      "emailDispatched": true
+    },
+    {
+      "id": "alert_seed_2",
+      "userId": "usr_alex_trader",
+      "userEmail": "alex.rivera@costorah.io",
+      "asset": "BTC",
+      "fiatCurrency": "INR",
+      "direction": "AT_OR_BELOW",
+      "targetPriceFiatMinor": 735000000,
+      "channel": "EMAIL",
+      "status": "TRIGGERED",
+      "createdAt": "2026-10-28T03:01:10.477Z",
+      "triggeredAt": "2026-10-28T03:16:10.477Z",
+      "triggeredOfferId": "off_buy_inr_btc_4",
+      "triggeredPriceFiatMinor": 586470000,
+      "emailDispatched": true
+    }
+  ],
+  "workerStatus": {
+    "lastRunAt": "2026-10-28T03:16:10.477Z",
+    "totalScans": 2,
+    "triggeredCount": 2,
+    "intervalSeconds": 15
+  },
+  "feeBps": 100,
+  "supportedPaymentMethods": {
+    "INR": [
+      "PhonePe",
+      "Google Pay (GPay)",
+      "Paytm",
+      "Credit / Debit Card",
+      "UPI Instant",
+      "IMPS Bank Transfer",
+      "NEFT",
+      "RTGS"
+    ],
+    "USD": [
+      "Credit / Debit Card",
+      "Google Pay (GPay)",
+      "FedNow Instant",
+      "ACH Bank Transfer",
+      "Zelle",
+      "Domestic Wire"
+    ],
+    "EUR": [
+      "Credit / Debit Card",
+      "Google Pay (GPay)",
+      "SEPA Instant",
+      "SEPA Credit Transfer",
+      "Revolut",
+      "N26 Instant"
+    ],
+    "GBP": [
+      "Credit / Debit Card",
+      "Google Pay (GPay)",
+      "Faster Payments (FPS)",
+      "CHAPS",
+      "Monzo",
+      "Revolut UK"
+    ],
+    "NGN": [
+      "NIP Instant Transfer",
+      "OPay",
+      "PalmPay",
+      "Kuda Bank",
+      "Credit / Debit Card"
+    ],
+    "TRY": [
+      "FAST Instant TRY",
+      "Papara",
+      "Ziraat Bank Transfer",
+      "Garanti BBVA",
+      "Credit / Debit Card"
+    ],
+    "IRR": [
+      "Shetab Card-to-Card",
+      "Satna / Paya Bank Rail"
+    ],
+    "BRL": [
+      "Pix Instant",
+      "Nubank",
+      "Itaú Transfer",
+      "Credit / Debit Card"
+    ],
+    "AED": [
+      "UAEFTS Instant",
+      "Wio Bank",
+      "Emirates NBD",
+      "Credit / Debit Card"
+    ],
+    "VND": [
+      "VietQR Napas247",
+      "MoMo Wallet",
+      "Vietcombank",
+      "Techcombank 24/7"
+    ]
+  },
+  "swapHistory": [
+    {
+      "id": "swp_mvrjlm5m_65e1",
+      "userId": "usr_alex_trader",
+      "fromAsset": "USDT",
+      "toAsset": "BNB",
+      "fromAmountMicro": 300000000,
+      "fromAmountFormatted": "300.000000",
+      "toAmountMicro": 488571,
+      "toAmountFormatted": "0.488571",
+      "chain": "BNB_CHAIN",
+      "chainName": "BNB Smart Chain (BEP-20)",
+      "tokenStandard": "BEP-20",
+      "settlementMode": "EXCHANGE_INTERNAL",
+      "exchangeRate": 0.001633,
+      "grossUsdValue": 300,
+      "netUsdValue": 299.25,
+      "netInrValue": 28356.93,
+      "swapFeeUsd": 0.75,
+      "networkGasFeeUsd": 0,
+      "txHash": "0x636861696e5f737761705f7377705f6d76726a6c6d356d5f36356531bbbbbbbb",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-28T03:16:10.474Z"
+    }
+  ],
+  "reconciliation": {
+    "isValid": true,
+    "totalUsersChecked": 4,
+    "discrepancies": []
+  },
+  "livePrices": {
+    "rates": {
+      "BTC": {
+        "usd": 82740,
+        "inr": 7840442.4,
+        "fiatPrices": {
+          "USD": 82740,
+          "INR": 7840442.4,
+          "TRY": 2833845,
+          "IRR": 3475080000,
+          "NGN": 134038800,
+          "EUR": 76120.8,
+          "GBP": 65364.6,
+          "BRL": 475755,
+          "AED": 303655.8,
+          "VND": 2101596000
+        },
+        "change24h": 2.34,
+        "lastUpdated": "2026-10-28T03:16:10.452Z"
+      },
+      "ETH": {
+        "usd": 2428,
+        "inr": 230077.28,
+        "fiatPrices": {
+          "USD": 2428,
+          "INR": 230077.28,
+          "TRY": 83159,
+          "IRR": 101976000,
+          "NGN": 3933360,
+          "EUR": 2233.76,
+          "GBP": 1918.12,
+          "BRL": 13961,
+          "AED": 8910.76,
+          "VND": 61671200
+        },
+        "change24h": -0.65,
+        "lastUpdated": "2026-10-28T03:16:10.452Z"
+      },
+      "BNB": {
+        "usd": 612.5,
+        "inr": 58040.5,
+        "fiatPrices": {
+          "USD": 612.5,
+          "INR": 58040.5,
+          "TRY": 20978.13,
+          "IRR": 25725000,
+          "NGN": 992250,
+          "EUR": 563.5,
+          "GBP": 483.88,
+          "BRL": 3521.88,
+          "AED": 2247.88,
+          "VND": 15557500
+        },
+        "change24h": 1.48,
+        "lastUpdated": "2026-10-28T03:16:10.452Z"
+      },
+      "SOL": {
+        "usd": 105.7,
+        "inr": 10016.13,
+        "fiatPrices": {
+          "USD": 105.7,
+          "INR": 10016.13,
+          "TRY": 3620.22,
+          "IRR": 4439400,
+          "NGN": 171234,
+          "EUR": 97.24,
+          "GBP": 83.5,
+          "BRL": 607.77,
+          "AED": 387.92,
+          "VND": 2684780
+        },
+        "change24h": 3.1,
+        "lastUpdated": "2026-10-28T03:16:10.452Z"
+      },
+      "USDT": {
+        "usd": 1,
+        "inr": 94.76,
+        "fiatPrices": {
+          "USD": 1,
+          "INR": 94.76,
+          "TRY": 34.25,
+          "IRR": 42000,
+          "NGN": 1620,
+          "EUR": 0.92,
+          "GBP": 0.79,
+          "BRL": 5.75,
+          "AED": 3.67,
+          "VND": 25400
+        },
+        "change24h": 0.05,
+        "lastUpdated": "2026-10-28T03:16:10.452Z"
+      },
+      "USDC": {
+        "usd": 1,
+        "inr": 94.76,
+        "fiatPrices": {
+          "USD": 1,
+          "INR": 94.76,
+          "TRY": 34.25,
+          "IRR": 42000,
+          "NGN": 1620,
+          "EUR": 0.92,
+          "GBP": 0.79,
+          "BRL": 5.75,
+          "AED": 3.67,
+          "VND": 25400
+        },
+        "change24h": 0.02,
+        "lastUpdated": "2026-10-28T03:16:10.452Z"
+      }
+    },
+    "usdInrRate": 94.76,
+    "fiatExchangeRates": {
+      "USD": 1,
+      "INR": 94.76,
+      "TRY": 34.25,
+      "IRR": 42000,
+      "NGN": 1620,
+      "EUR": 0.92,
+      "GBP": 0.79,
+      "BRL": 5.75,
+      "AED": 3.67,
+      "VND": 25400
+    },
+    "lastUpdated": "2026-10-28T03:16:10.452Z",
+    "source": "CoinGecko & Binance Real-Time Live Feed"
+  }
+}
