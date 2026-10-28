@@ -23,6 +23,7 @@ import {
   ZoomIn,
   Trash2,
   X,
+  BellRing,
 } from 'lucide-react';
 import {
   FIAT_SYMBOLS,
@@ -227,6 +228,11 @@ export interface OrdersViewProps {
   onCancelOrder?: (orderId: string, reason?: string) => Promise<void>;
   onUpdateOfferStatus?: (offerId: string, action: 'PAUSE' | 'RESUME' | 'CANCEL') => Promise<void>;
   onEditOffer?: (offerId: string, payload: EditOfferPayload) => Promise<void>;
+  onNotifyPaymentCompleted?: (params: {
+    orderId: string;
+    customMessage: string;
+    channel: 'IN_APP' | 'EMAIL' | 'BOTH';
+  }) => Promise<void>;
 }
 
 export const OrdersView: React.FC<OrdersViewProps> = ({
@@ -246,6 +252,7 @@ export const OrdersView: React.FC<OrdersViewProps> = ({
   onCancelOrder,
   onUpdateOfferStatus,
   onEditOffer,
+  onNotifyPaymentCompleted,
 }) => {
   const [activeTab, setActiveTab] = useState<OrderCategoryTab>(initialCategoryTab);
   const [statusFilter, setStatusFilter] = useState<'ALL' | TradeBadgeType>('ALL');
@@ -263,6 +270,8 @@ export const OrdersView: React.FC<OrdersViewProps> = ({
   const [receiptModalImage, setReceiptModalImage] = useState<string | null>(null);
   const [disputeReason, setDisputeReason] = useState('');
   const [chatInput, setChatInput] = useState('');
+  const [notifyInput, setNotifyInput] = useState('');
+  const [notifyChannel, setNotifyChannel] = useState<'IN_APP' | 'BOTH'>('BOTH');
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
@@ -723,8 +732,8 @@ export const OrdersView: React.FC<OrdersViewProps> = ({
           </div>
 
           {/* Search & Crypto Asset Filter */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            <div className="relative">
+          <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
+            <div className="relative w-full sm:w-auto">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
               <input
                 type="text"
@@ -732,11 +741,11 @@ export const OrdersView: React.FC<OrdersViewProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search order ID, BTC, counterparty..."
-                className="pl-8 pr-3 py-1.5 text-xs bg-[#0B0E14] border border-white/15 rounded-lg text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-400"
+                className="w-full sm:w-auto pl-8 pr-3 py-2 sm:py-1.5 text-xs bg-[#0B0E14] border border-white/15 rounded-lg text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-400"
               />
             </div>
 
-            <div className="flex items-center gap-1.5 min-w-[230px]">
+            <div className="flex items-center gap-1.5 w-full sm:w-auto sm:min-w-[230px]">
               <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <CustomSelect
                 testId="orders-asset-filter"
@@ -1365,6 +1374,118 @@ export const OrdersView: React.FC<OrdersViewProps> = ({
                             <div className="text-emerald-300/80 text-[11px]">
                               {formatMicro6(selectedOrder.cryptoQuantityMicro)} {selectedOrder.asset} credited to buyer custody · 1% fee settled.
                             </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Notify Counterparty User of Payment Completion (Alert + Direct Message) */}
+                      {(selectedOrder.state === 'PAYMENT_MARKED_SENT' ||
+                        selectedOrder.state === 'COMPLETED') && (
+                        <div
+                          data-testid="orders-view-notify-payment-box"
+                          className="p-4 bg-[#0B0E14] border border-emerald-500/35 rounded-xl space-y-2.5"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-300">
+                              <BellRing className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                              <span>Notify User of Payment Completion</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() => setNotifyChannel('IN_APP')}
+                                className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border cursor-pointer ${
+                                  notifyChannel === 'IN_APP'
+                                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                                    : 'bg-[#131A24] border-white/10 text-slate-400'
+                                }`}
+                              >
+                                In-App + Chat
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setNotifyChannel('BOTH')}
+                                className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border cursor-pointer ${
+                                  notifyChannel === 'BOTH'
+                                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                                    : 'bg-[#131A24] border-white/10 text-slate-400'
+                                }`}
+                              >
+                                In-App + Email
+                              </button>
+                            </div>
+                          </div>
+
+                          <p className="text-[11px] text-slate-400">
+                            Send an instant alert &amp; message to{' '}
+                            <span className="text-slate-200 font-semibold">
+                              {getUserDisplayName(
+                                isSelfBuy ? selectedOrder.sellerId : selectedOrder.buyerId
+                              ).replace(' (You)', '')}
+                            </span>{' '}
+                            informing them that payment of {sym}
+                            {formatMinor2(selectedOrder.grossFiatMinor)} {selectedOrder.fiatCurrency} is completed.
+                          </p>
+
+                          <div className="flex flex-col sm:flex-row gap-2">
+                            <input
+                              type="text"
+                              data-testid="orders-notify-payment-input"
+                              value={notifyInput}
+                              onChange={(e) => setNotifyInput(e.target.value)}
+                              placeholder={`Payment of ${sym}${formatMinor2(selectedOrder.grossFiatMinor)} ${selectedOrder.fiatCurrency} (Ref: ${selectedOrder.paymentReference || 'UTR-VERIFIED'}) is completed...`}
+                              className="flex-1 px-3 py-1.5 text-xs bg-[#131A24] border border-white/15 rounded-lg text-slate-100 focus:outline-none focus:border-emerald-400"
+                            />
+                            <button
+                              type="button"
+                              data-testid="orders-send-payment-alert-btn"
+                              disabled={busyAction !== null}
+                              onClick={async () => {
+                                setBusyAction('notify-payment');
+                                setActionError(null);
+                                setActionSuccess(null);
+                                const recipientName = getUserDisplayName(
+                                  isSelfBuy ? selectedOrder.sellerId : selectedOrder.buyerId
+                                ).replace(' (You)', '');
+                                const defaultText =
+                                  selectedOrder.state === 'COMPLETED'
+                                    ? `Payment & escrow settlement completed for Order #${selectedOrder.id} (${sym}${formatMinor2(selectedOrder.grossFiatMinor)} ${selectedOrder.fiatCurrency} · ${formatMicro6(selectedOrder.cryptoQuantityMicro)} ${selectedOrder.asset} released)!`
+                                    : `Payment of ${sym}${formatMinor2(selectedOrder.grossFiatMinor)} ${selectedOrder.fiatCurrency} via ${selectedOrder.paymentMethod} is completed (Ref: ${selectedOrder.paymentReference || 'UTR-VERIFIED'}). Please check your account and release ${formatMicro6(selectedOrder.cryptoQuantityMicro)} ${selectedOrder.asset}.`;
+                                const finalMsg = notifyInput.trim() || defaultText;
+                                try {
+                                  if (onNotifyPaymentCompleted) {
+                                    await onNotifyPaymentCompleted({
+                                      orderId: selectedOrder.id,
+                                      customMessage: finalMsg,
+                                      channel: notifyChannel,
+                                    });
+                                  } else {
+                                    await onSendChatMessage(
+                                      selectedOrder.id,
+                                      `🔔 PAYMENT COMPLETION ALERT TO ${recipientName.toUpperCase()}: ${finalMsg}`
+                                    );
+                                  }
+                                  setNotifyInput('');
+                                  setActionSuccess(
+                                    `Payment completion alert & message delivered to ${recipientName}!`
+                                  );
+                                } catch (err: unknown) {
+                                  setActionError(
+                                    err instanceof Error
+                                      ? err.message
+                                      : 'Failed to send payment completion alert'
+                                  );
+                                } finally {
+                                  setBusyAction(null);
+                                }
+                              }}
+                              className="px-3.5 py-1.5 text-xs font-bold text-[#0B0E14] bg-emerald-400 hover:bg-emerald-300 rounded-lg cursor-pointer inline-flex items-center justify-center gap-1.5 whitespace-nowrap shadow-sm"
+                            >
+                              <BellRing className="w-3.5 h-3.5" />
+                              <span>
+                                {busyAction === 'notify-payment' ? 'Sending...' : 'Notify User'}
+                              </span>
+                            </button>
                           </div>
                         </div>
                       )}

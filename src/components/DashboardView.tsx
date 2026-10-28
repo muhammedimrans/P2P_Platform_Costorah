@@ -1124,25 +1124,25 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     <div className="space-y-6">
       {/* Header & Contextual Sub-Navigation */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-white/[0.08]">
-        <div className="flex items-center gap-3.5">
+        <div className="flex items-start sm:items-center gap-3 sm:gap-3.5 min-w-0">
           <img
             src={currentUser.avatarUrl || profileAvatarUrl}
             alt={currentUser.displayName}
             data-testid="dashboard-header-avatar"
-            className="w-12 h-12 rounded-full object-cover border-2 border-emerald-400/60 shrink-0 bg-[#131A24]"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-emerald-400/60 shrink-0 bg-[#131A24]"
           />
-          <div>
-            <div className="text-xs font-medium text-slate-400">
+          <div className="min-w-0">
+            <div className="text-[11px] sm:text-xs font-medium text-slate-400 break-words">
               COSTORAH Profile · {currentUser.displayName} ({currentUser.email}) · Reputation{' '}
               {currentUser.reputationScore.toFixed(1)}% ({currentUser.completedTrades} trades)
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 font-display mt-0.5">
+            <h1 className="text-xl sm:text-3xl font-bold text-slate-100 font-display mt-0.5">
               Trader Profile, Portfolio &amp; Banking Custody
             </h1>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 bg-[#131A24] p-1 rounded-lg border border-white/[0.08] overflow-x-auto max-w-full flex-nowrap sm:flex-wrap">
+        <div className="flex items-center gap-1.5 bg-[#131A24] p-1 rounded-lg border border-white/[0.08] overflow-x-auto w-full md:w-auto max-w-full flex-nowrap sm:flex-wrap">
           {(
             [
               { id: 'PORTFOLIO', label: 'Portfolio & Custody' },
@@ -1159,7 +1159,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               type="button"
               data-testid={`dashboard-tab-${t.id}`}
               onClick={() => setSubTab(t.id)}
-              className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
+              className={`px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                 subTab === t.id
                   ? 'bg-emerald-500 text-[#0B0E14]'
                   : 'text-slate-300 hover:text-white'

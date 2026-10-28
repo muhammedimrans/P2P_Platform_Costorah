@@ -258,6 +258,54 @@ export interface PriceAlertWorkerStatus {
   intervalSeconds: number;
 }
 
+export interface MarketTweetComment {
+  id: string;
+  tweetId: string;
+  authorId: string;
+  authorName: string;
+  authorHandle: string;
+  authorAvatarUrl?: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface MarketTweetOrderAttachment {
+  offerId?: string;
+  orderId?: string;
+  side: 'BUY' | 'SELL';
+  asset: CryptoAsset;
+  fiatCurrency: FiatCurrency;
+  unitPriceFormatted: string;
+  quantityFormatted: string;
+  minOrderFormatted: string;
+  maxOrderFormatted: string;
+  paymentMethods: string[];
+}
+
+export interface MarketTweetRecord {
+  id: string;
+  authorId: string;
+  authorName: string;
+  authorHandle: string;
+  authorAvatarUrl?: string;
+  authorVerified: boolean;
+  authorReputationScore: number;
+  content: string;
+  sentiment: 'BULLISH' | 'BEARISH' | 'NEUTRAL' | 'ORDER_ALERT';
+  taggedAssets: CryptoAsset[];
+  taggedUserHandles: string[];
+  imageUrl?: string;
+  imageCaption?: string;
+  orderAttachment?: MarketTweetOrderAttachment;
+  likedByUserIds: string[];
+  retweetedByUserIds: string[];
+  retweetOfId?: string;
+  retweetedByName?: string;
+  retweetedByHandle?: string;
+  comments: MarketTweetComment[];
+  createdAt: string;
+}
+
 export interface AppStateSnapshot {
   currentUser: UserProfile;
   allUsers: UserProfile[];
@@ -274,6 +322,7 @@ export interface AppStateSnapshot {
   feeBps: number;
   supportedPaymentMethods: Record<FiatCurrency, string[]>;
   swapHistory?: SwapExecutionRecord[];
+  marketTweets?: MarketTweetRecord[];
   reconciliation: {
     isValid: boolean;
     totalUsersChecked: number;
@@ -285,6 +334,7 @@ export type AppRoute =
   | 'home'
   | 'marketplace'
   | 'swap'
+  | 'pulse'
   | 'create-offer'
   | 'orders'
   | 'dashboard'

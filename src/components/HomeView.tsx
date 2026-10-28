@@ -747,9 +747,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <h1
                 style={{
                   textWrap: 'balance',
-                  fontSize: 'clamp(2.35rem, 4.1vw, 3.6rem)',
+                  fontSize: 'clamp(1.75rem, 4.1vw, 3.6rem)',
                 }}
-                className={`font-black tracking-tight uppercase font-display leading-[1.04] ${
+                className={`font-black tracking-tight uppercase font-display leading-[1.06] sm:leading-[1.04] ${
                   isDay ? 'text-[#0B65C6]' : 'text-white'
                 }`}
               >
@@ -816,12 +816,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </div>
 
               {/* Primary CTA + "How it works?" Video/Tutorial Style Button (Matching hodlhodl-top.png) */}
-              <div className="pt-2 flex flex-wrap items-center gap-4">
+              <div className="pt-2 flex flex-wrap items-center gap-3 sm:gap-4">
                 <button
                   type="button"
                   data-testid="enter-country-market-btn"
                   onClick={() => onNavigate('marketplace')}
-                  className={`px-8 py-3.5 text-sm font-mono font-bold rounded-xl transition-colors cursor-pointer inline-flex items-center gap-2.5 shadow-md ${
+                  className={`w-full sm:w-auto justify-center px-6 sm:px-8 py-3.5 text-sm font-mono font-bold rounded-xl transition-colors cursor-pointer inline-flex items-center gap-2.5 shadow-md ${
                     isDay
                       ? 'bg-[#0B65C6] hover:bg-[#0852A3] text-white'
                       : 'bg-emerald-400 hover:bg-emerald-300 text-[#05080D]'
@@ -834,7 +834,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 <button
                   type="button"
                   onClick={() => scrollToSection('getting-started-section')}
-                  className={`px-3 py-2 text-sm font-mono font-semibold inline-flex items-center gap-2 cursor-pointer transition-colors ${
+                  className={`px-3 py-2 text-xs sm:text-sm font-mono font-semibold inline-flex items-center gap-2 cursor-pointer transition-colors ${
                     isDay
                       ? 'text-[#0B65C6] hover:text-[#084282]'
                       : 'text-emerald-400 hover:text-emerald-300'
@@ -1018,7 +1018,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <button
               type="button"
               onClick={() => setWidgetSide('BUY')}
-              className={`py-4 text-sm font-mono font-bold transition-colors cursor-pointer ${
+              className={`py-3 sm:py-4 px-2 text-xs sm:text-sm font-mono font-bold transition-colors cursor-pointer ${
                 widgetSide === 'BUY'
                   ? isDay
                     ? 'bg-white text-[#0B65C6] border-b-2 border-[#0B65C6]'
@@ -1033,7 +1033,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <button
               type="button"
               onClick={() => setWidgetSide('SELL')}
-              className={`py-4 text-sm font-mono font-bold transition-colors cursor-pointer ${
+              className={`py-3 sm:py-4 px-2 text-xs sm:text-sm font-mono font-bold transition-colors cursor-pointer ${
                 widgetSide === 'SELL'
                   ? isDay
                     ? 'bg-white text-[#0B65C6] border-b-2 border-[#0B65C6]'
@@ -1048,7 +1048,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
 
           {/* Widget Form Rows */}
-          <div className="p-6 sm:p-8 space-y-6">
+          <div className="p-4 sm:p-8 space-y-5 sm:space-y-6">
             {/* Row 1: Asset Symbol Selector (BTC, ETH, SOL, USDT, USDC) */}
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
               <div

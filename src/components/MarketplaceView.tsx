@@ -636,7 +636,7 @@ export const MarketplaceView: React.FC<MarketplaceViewProps> = ({
           </h1>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5 self-start">
+        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
           <button
             type="button"
             onClick={() => setShowAlertsPanel((prev) => !prev)}
@@ -650,14 +650,14 @@ export const MarketplaceView: React.FC<MarketplaceViewProps> = ({
           <div
             role="tablist"
             aria-label="Trade Direction"
-            className="inline-flex p-1 bg-[#131A24] border border-white/[0.08] rounded-lg"
+            className="grid grid-cols-2 sm:inline-flex w-full sm:w-auto p-1 bg-[#131A24] border border-white/[0.08] rounded-lg"
           >
             <button
               type="button"
               role="tab"
               aria-selected={tradeTab === 'BUY_CRYPTO'}
               onClick={() => setTradeTab('BUY_CRYPTO')}
-              className={`px-5 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
+              className={`px-3 sm:px-5 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap text-center ${
                 tradeTab === 'BUY_CRYPTO'
                   ? 'bg-emerald-500 text-[#0B0E14]'
                   : 'text-slate-300 hover:text-white'
@@ -670,7 +670,7 @@ export const MarketplaceView: React.FC<MarketplaceViewProps> = ({
               role="tab"
               aria-selected={tradeTab === 'SELL_CRYPTO'}
               onClick={() => setTradeTab('SELL_CRYPTO')}
-              className={`px-5 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
+              className={`px-3 sm:px-5 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap text-center ${
                 tradeTab === 'SELL_CRYPTO'
                   ? 'bg-amber-400 text-[#0B0E14]'
                   : 'text-slate-300 hover:text-white'
@@ -1817,34 +1817,38 @@ export const MarketplaceView: React.FC<MarketplaceViewProps> = ({
               )}
 
               {/* Clean Offer Summary Header */}
-              <div className="grid grid-cols-3 gap-3 p-3.5 bg-[#0B0E14] border border-white/[0.08] rounded-xl font-mono tabular-nums text-xs">
-                <div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 p-3.5 bg-[#0B0E14] border border-white/[0.08] rounded-xl font-mono tabular-nums text-xs">
+                <div className="flex sm:block items-center justify-between">
                   <div className="text-slate-400 font-sans">Price per {activeOffer.asset}</div>
-                  <div className="text-base font-bold text-emerald-400 mt-0.5">
+                  <div className="text-base font-bold text-emerald-400 sm:mt-0.5">
                     {FIAT_SYMBOLS[activeOffer.fiatCurrency]}
                     {formatMinor2(activeOffer.unitPriceFiatMinor)}
                   </div>
                 </div>
-                <div>
+                <div className="flex sm:block items-center justify-between pt-2 sm:pt-0 border-t sm:border-t-0 border-white/[0.06]">
                   <div className="text-slate-400 font-sans">
                     {activeOffer.side === 'SELL' ? 'Available to Buy' : 'Buyer Wants'}
                   </div>
-                  <div className="text-sm font-semibold text-slate-100 mt-0.5">
-                    {formatMicro6(activeOffer.availableQuantityMicro)} {activeOffer.asset}
-                  </div>
-                  <div className="text-[11px] text-slate-400">
-                    ({FIAT_SYMBOLS[activeOffer.fiatCurrency]}{formatMinor2(activeOfferTotalFiatMinor)})
+                  <div className="text-right sm:text-left">
+                    <div className="text-sm font-semibold text-slate-100 sm:mt-0.5">
+                      {formatMicro6(activeOffer.availableQuantityMicro)} {activeOffer.asset}
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      ({FIAT_SYMBOLS[activeOffer.fiatCurrency]}{formatMinor2(activeOfferTotalFiatMinor)})
+                    </div>
                   </div>
                 </div>
-                <div>
+                <div className="flex sm:block items-center justify-between pt-2 sm:pt-0 border-t sm:border-t-0 border-white/[0.06]">
                   <div className="text-slate-400 font-sans">Order Range</div>
-                  <div className="text-sm font-semibold text-slate-200 mt-0.5">
-                    {FIAT_SYMBOLS[activeOffer.fiatCurrency]}
-                    {formatMinor2(activeOfferEffectiveMinMinor)} – {FIAT_SYMBOLS[activeOffer.fiatCurrency]}
-                    {formatMinor2(activeOfferEffectiveMaxMinor)}
-                  </div>
-                  <div className="text-[11px] text-emerald-400">
-                    Daily Limit: $10,000/day
+                  <div className="text-right sm:text-left">
+                    <div className="text-sm font-semibold text-slate-200 sm:mt-0.5">
+                      {FIAT_SYMBOLS[activeOffer.fiatCurrency]}
+                      {formatMinor2(activeOfferEffectiveMinMinor)} – {FIAT_SYMBOLS[activeOffer.fiatCurrency]}
+                      {formatMinor2(activeOfferEffectiveMaxMinor)}
+                    </div>
+                    <div className="text-[11px] text-emerald-400">
+                      Daily Limit: $10,000/day
+                    </div>
                   </div>
                 </div>
               </div>

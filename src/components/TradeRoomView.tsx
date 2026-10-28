@@ -31,8 +31,8 @@ import {
   ZoomIn,
   Clock,
   Timer,
-  Volume2,
-  VolumeX,
+  BellRing,
+  Mail,
 } from 'lucide-react';
 import { TradeSettlementSummary } from './TradeSettlementSummary';
 
@@ -53,9 +53,11 @@ interface TradeRoomViewProps {
   onOpenDispute: (orderId: string, reason: string) => Promise<void>;
   onSendMessage: (orderId: string, content: string, attachmentUrl?: string) => Promise<void>;
   onCancelOrder?: (orderId: string, reason?: string) => Promise<void>;
-  soundEnabled?: boolean;
-  onToggleSound?: () => void;
-  onTestPing?: (trigger: 'PENDING_PAYMENT' | 'TRADE_COMPLETED') => void;
+  onNotifyPaymentCompleted?: (params: {
+    orderId: string;
+    customMessage: string;
+    channel: 'IN_APP' | 'EMAIL' | 'BOTH';
+  }) => Promise<void>;
 }
 
 const LIFECYCLE_STEPS = [
@@ -104,9 +106,7 @@ export const TradeRoomView: React.FC<TradeRoomViewProps> = ({
   onOpenDispute,
   onSendMessage,
   onCancelOrder,
-  soundEnabled = true,
-  onToggleSound,
-  onTestPing,
+  onNotifyPaymentCompleted,
 }) => {
   const [paymentRefInput, setPaymentRefInput] = useState(order.paymentReference || '');
   const [evidenceUrlInput, setEvidenceUrlInput] = useState(order.paymentEvidenceUrl || '');
@@ -126,6 +126,11 @@ export const TradeRoomView: React.FC<TradeRoomViewProps> = ({
   const [chatInput, setChatInput] = useState('');
   const [actionError, setActionError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [autoNotifyOnMarkPaid, setAutoNotifyOnMarkPaid] = useState<boolean>(true);
+  const [notifyChannel, setNotifyChannel] = useState<'IN_APP' | 'BOTH'>('BOTH');
+  const [notifyCustomMsg, setNotifyCustomMsg] = useState<string>('');
+  const [notifyBusy, setNotifyBusy] = useState<boolean>(false);
+  const [notifySentBanner, setNotifySentBanner] = useState<string | null>(null);
 
   // Escrow Protocol Payment Window Countdown Timer (30-minute default window)
   const paymentWindowSeconds = order.paymentWindowSeconds || 1800;
@@ -375,10 +380,60 @@ export const TradeRoomView: React.FC<TradeRoomViewProps> = ({
         paymentEvidenceUrl: evidenceUrlInput,
         note: paymentNoteInput,
       });
+      if (autoNotifyOnMarkPaid && onNotifyPaymentCompleted) {
+        const refUsed = paymentRefInput.trim() || order.paymentReference || 'UTR-VERIFIED';
+        const autoAlertMsg = `Payment of ${fiatSym}${formatMinor2(order.grossFiatMinor)} ${order.fiatCurrency} via ${order.paymentMethod} is completed (Ref: ${refUsed}).${paymentNoteInput ? ` Note: "${paymentNoteInput}".` : ''} Please verify your account and release ${formatMicro6(order.cryptoQuantityMicro)} ${order.asset}.`;
+        await onNotifyPaymentCompleted({
+          orderId: order.id,
+          customMessage: autoAlertMsg,
+          channel: notifyChannel,
+        });
+        setNotifySentBanner(
+          `Payment completion alert & message delivered to ${sellerUser?.displayName || 'Seller'} (${notifyChannel === 'BOTH' ? 'In-App + Email + Chat' : 'In-App + Chat'}).`
+        );
+      }
     } catch (err: unknown) {
       setActionError(err instanceof Error ? err.message : 'Failed to submit payment reference');
     } finally {
       setBusy(false);
+    }
+  };
+
+  const handleSendPaymentCompletionNotification = async (overrideMsg?: string) => {
+    setActionError(null);
+    setNotifyBusy(true);
+    try {
+      const isBuyerActor = currentUser.id === order.buyerId;
+      const recipientName = isBuyerActor
+        ? sellerUser?.displayName || order.sellerId
+        : buyerUser?.displayName || order.buyerId;
+      const defaultMsg =
+        order.state === 'COMPLETED'
+          ? `Payment & escrow settlement completed for Order #${order.id}! ${fiatSym}${formatMinor2(order.grossFiatMinor)} ${order.fiatCurrency} confirmed and ${formatMicro6(order.cryptoQuantityMicro)} ${order.asset} has been credited.`
+          : `Hi ${recipientName.replace(' (You)', '')}, I have completed the payment of ${fiatSym}${formatMinor2(order.grossFiatMinor)} ${order.fiatCurrency} via ${order.paymentMethod} (Ref: ${order.paymentReference || 'UTR-VERIFIED'}). Please verify receipt in your account and release ${formatMicro6(order.cryptoQuantityMicro)} ${order.asset} from escrow.`;
+
+      const finalMsg = (overrideMsg ?? notifyCustomMsg).trim() || defaultMsg;
+
+      if (onNotifyPaymentCompleted) {
+        await onNotifyPaymentCompleted({
+          orderId: order.id,
+          customMessage: finalMsg,
+          channel: notifyChannel,
+        });
+      } else {
+        await onSendMessage(order.id, `🔔 PAYMENT COMPLETION ALERT TO ${recipientName.toUpperCase()}: ${finalMsg}`);
+      }
+
+      setNotifyCustomMsg('');
+      setNotifySentBanner(
+        `Alert & message sent to ${recipientName.replace(' (You)', '')} (${
+          notifyChannel === 'BOTH' ? 'In-App Alert + Email + Trade Chat' : 'In-App Alert + Trade Chat'
+        }) at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`
+      );
+    } catch (err: unknown) {
+      setActionError(err instanceof Error ? err.message : 'Failed to notify user of payment completion');
+    } finally {
+      setNotifyBusy(false);
     }
   };
 
@@ -387,6 +442,9 @@ export const TradeRoomView: React.FC<TradeRoomViewProps> = ({
     setBusy(true);
     try {
       await onConfirmAndRelease(order.id);
+      setNotifySentBanner(
+        `Escrow released & payment completion alert sent to ${buyerUser?.displayName || 'Buyer'}!`
+      );
     } catch (err: unknown) {
       setActionError(err instanceof Error ? err.message : 'Failed to release escrow');
     } finally {
@@ -475,11 +533,11 @@ export const TradeRoomView: React.FC<TradeRoomViewProps> = ({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto shrink-0">
           {/* Header Time Remaining Pill */}
           <div
             data-testid="trade-room-time-remaining-header"
-            className={`px-3.5 py-2 rounded-xl border font-mono tabular-nums flex items-center gap-2.5 ${
+            className={`flex-1 sm:flex-initial px-3 sm:px-3.5 py-2 rounded-xl border font-mono tabular-nums flex items-center gap-2.5 ${
               isPaymentWindowActive
                 ? isUrgentWindow
                   ? 'bg-red-950/60 border-red-500/50 text-red-200'
@@ -527,58 +585,9 @@ export const TradeRoomView: React.FC<TradeRoomViewProps> = ({
             </div>
           </div>
 
-          {/* Audio Ping Notification Control */}
-          <div
-            data-testid="trade-room-sound-alert-box"
-            className="px-3 py-2 rounded-xl border border-white/[0.08] bg-[#131A24] font-mono flex items-center gap-2"
-          >
-            <button
-              type="button"
-              data-testid="trade-room-sound-toggle-btn"
-              onClick={onToggleSound}
-              title={
-                soundEnabled
-                  ? 'Sound Ping Enabled for PENDING_PAYMENT & TRADE_COMPLETED'
-                  : 'Sound Ping Muted — Click to Enable'
-              }
-              className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
-                soundEnabled
-                  ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/25'
-                  : 'bg-slate-800 border-white/10 text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {soundEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
-            </button>
-            <div className="leading-tight">
-              <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
-                Audio Ping
-              </div>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className={`text-xs font-bold ${soundEnabled ? 'text-emerald-300' : 'text-slate-400'}`}>
-                  {soundEnabled ? 'Active' : 'Muted'}
-                </span>
-                {onTestPing && (
-                  <button
-                    type="button"
-                    data-testid="trade-room-test-ping-btn"
-                    onClick={() =>
-                      onTestPing(
-                        order.state === 'COMPLETED' ? 'TRADE_COMPLETED' : 'PENDING_PAYMENT'
-                      )
-                    }
-                    className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white/[0.06] hover:bg-white/[0.14] text-slate-200 border border-white/10 cursor-pointer"
-                    title="Preview subtle browser ping tone"
-                  >
-                    Test Ping
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start font-mono tabular-nums bg-[#131A24] sm:bg-transparent p-2.5 sm:p-0 rounded-lg sm:rounded-none border border-white/[0.06] sm:border-0 shrink-0">
+          <div className="flex-1 sm:flex-initial flex sm:flex-col items-center sm:items-end justify-between sm:justify-start font-mono tabular-nums bg-[#131A24] sm:bg-transparent p-2.5 sm:p-0 rounded-xl sm:rounded-none border border-white/[0.08] sm:border-0 shrink-0">
             <div className="text-[11px] sm:text-xs text-slate-400">Escrow Locked Quantity</div>
-            <div className="text-base sm:text-xl font-bold text-emerald-400">
+            <div className="text-sm sm:text-xl font-bold text-emerald-400">
               {formatMicro6(order.cryptoQuantityMicro)} {order.asset}
             </div>
           </div>
@@ -1209,6 +1218,57 @@ export const TradeRoomView: React.FC<TradeRoomViewProps> = ({
                 />
               </div>
 
+              {/* Instant Seller Alert Option on Payment Submission */}
+              <div className="p-3.5 rounded-xl bg-emerald-950/25 border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <label className="flex items-start gap-2.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={autoNotifyOnMarkPaid}
+                    onChange={(e) => setAutoNotifyOnMarkPaid(e.target.checked)}
+                    className="mt-0.5 rounded border-emerald-500/40 bg-[#0B0E14] text-emerald-500 focus:ring-emerald-400"
+                  />
+                  <div>
+                    <div className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                      <BellRing className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>Notify Seller Immediately of Payment Completion</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      Automatically sends an alert and direct Trade Room message to{' '}
+                      <span className="text-slate-200 font-semibold">
+                        {sellerUser?.displayName || order.sellerId}
+                      </span>{' '}
+                      informing them that payment of {fiatSym}
+                      {formatMinor2(order.grossFiatMinor)} {order.fiatCurrency} is completed.
+                    </p>
+                  </div>
+                </label>
+
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setNotifyChannel('IN_APP')}
+                    className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold border cursor-pointer transition-colors ${
+                      notifyChannel === 'IN_APP'
+                        ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                        : 'bg-[#0B0E14] border-white/10 text-slate-400'
+                    }`}
+                  >
+                    In-App + Chat
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setNotifyChannel('BOTH')}
+                    className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold border cursor-pointer transition-colors ${
+                      notifyChannel === 'BOTH'
+                        ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                        : 'bg-[#0B0E14] border-white/10 text-slate-400'
+                    }`}
+                  >
+                    In-App + Email + Chat
+                  </button>
+                </div>
+              </div>
+
               <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
                 <button
                   type="submit"
@@ -1216,7 +1276,13 @@ export const TradeRoomView: React.FC<TradeRoomViewProps> = ({
                   className="px-5 py-2.5 text-xs font-semibold text-[#0B0E14] bg-emerald-400 hover:bg-emerald-300 rounded-lg transition-colors cursor-pointer shadow-sm inline-flex items-center gap-1.5"
                 >
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>{busy ? 'Recording Declaration...' : 'Submit Payment Proof & Mark Paid'}</span>
+                  <span>
+                    {busy
+                      ? 'Recording Declaration...'
+                      : autoNotifyOnMarkPaid
+                      ? 'Submit Proof, Mark Paid & Notify Seller'
+                      : 'Submit Payment Proof & Mark Paid'}
+                  </span>
                 </button>
 
                 <button
@@ -1408,6 +1474,154 @@ export const TradeRoomView: React.FC<TradeRoomViewProps> = ({
                   Open Escrow Dispute
                 </button>
               </div>
+            </div>
+          )}
+
+          {/* DEDICATED PAYMENT COMPLETION NOTIFICATION & COUNTERPARTY ALERT CARD (Available after Payment is Marked Sent or Completed) */}
+          {(order.state === 'PAYMENT_MARKED_SENT' ||
+            order.state === 'PAYMENT_REVIEW' ||
+            order.state === 'RELEASE_PENDING' ||
+            order.state === 'COMPLETED') && (
+            <div
+              data-testid="payment-completion-notify-card"
+              className="bg-gradient-to-br from-[#131A24] via-[#111C28] to-[#0D1622] border border-emerald-500/40 rounded-xl p-5 space-y-4 shadow-[0_0_24px_rgba(16,185,129,0.08)]"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
+                <div className="flex items-start gap-3">
+                  <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 shrink-0 mt-0.5">
+                    <BellRing className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-sm sm:text-base font-bold text-slate-100 font-display">
+                        Notify User of Payment Completion
+                      </h3>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/35">
+                        Instant Alert &amp; Message
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-300 mt-1">
+                      Send a direct alert and Trade Room message to{' '}
+                      <span className="font-semibold text-emerald-300">
+                        {currentUser.id === order.buyerId
+                          ? sellerUser?.displayName || order.sellerId
+                          : buyerUser?.displayName || order.buyerId}
+                      </span>{' '}
+                      informing them that the payment of{' '}
+                      <span className="font-mono font-bold text-white">
+                        {fiatSym}
+                        {formatMinor2(order.grossFiatMinor)} {order.fiatCurrency}
+                      </span>{' '}
+                      is completed.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Delivery Channel Selector */}
+                <div className="flex items-center gap-1.5 shrink-0 self-start sm:self-center">
+                  <button
+                    type="button"
+                    data-testid="notify-channel-in-app-btn"
+                    onClick={() => setNotifyChannel('IN_APP')}
+                    className={`px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-bold border cursor-pointer inline-flex items-center gap-1.5 transition-colors ${
+                      notifyChannel === 'IN_APP'
+                        ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                        : 'bg-[#0B0E14] border-white/10 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <BellRing className="w-3 h-3" />
+                    <span>In-App + Chat</span>
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="notify-channel-both-btn"
+                    onClick={() => setNotifyChannel('BOTH')}
+                    className={`px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-bold border cursor-pointer inline-flex items-center gap-1.5 transition-colors ${
+                      notifyChannel === 'BOTH'
+                        ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                        : 'bg-[#0B0E14] border-white/10 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <Mail className="w-3 h-3" />
+                    <span>In-App + Email + Chat</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 1-Click Quick Preset Alert Templates */}
+              <div className="space-y-1.5">
+                <div className="text-[11px] font-mono text-slate-400">
+                  Quick Alert Templates (Click to fill or send immediately):
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    {
+                      label: '✓ Payment Completed — Please Verify & Release',
+                      text: `Hi ${(currentUser.id === order.buyerId ? sellerUser?.displayName || 'Seller' : buyerUser?.displayName || 'Buyer').replace(' (You)', '')}, I have completed the payment of ${fiatSym}${formatMinor2(order.grossFiatMinor)} ${order.fiatCurrency} via ${order.paymentMethod} (Ref: ${order.paymentReference || 'UTR-VERIFIED'}). Please check your account and release ${formatMicro6(order.cryptoQuantityMicro)} ${order.asset}.`,
+                    },
+                    {
+                      label: '🧾 UTR & Receipt Uploaded — Check Bank',
+                      text: `Payment completed! UTR Reference ${order.paymentReference || 'UTR-VERIFIED'} and receipt proof are attached for ${fiatSym}${formatMinor2(order.grossFiatMinor)} ${order.fiatCurrency}. Please confirm receipt.`,
+                    },
+                    {
+                      label: '⚡ Settlement & Payment Completed',
+                      text: `Payment and escrow settlement for Order #${order.id} (${fiatSym}${formatMinor2(order.grossFiatMinor)} ${order.fiatCurrency} · ${formatMicro6(order.cryptoQuantityMicro)} ${order.asset}) is 100% completed!`,
+                    },
+                  ].map((preset, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setNotifyCustomMsg(preset.text)}
+                      className="px-2.5 py-1.5 rounded-lg text-xs font-mono bg-[#0B0E14] hover:bg-emerald-500/15 text-slate-200 hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 cursor-pointer transition-colors text-left"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Custom Message Input + Notify Button */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+                <input
+                  type="text"
+                  data-testid="payment-completion-notify-input"
+                  value={notifyCustomMsg}
+                  onChange={(e) => setNotifyCustomMsg(e.target.value)}
+                  placeholder={`Message to ${(currentUser.id === order.buyerId ? sellerUser?.displayName || 'Seller' : buyerUser?.displayName || 'Buyer').replace(' (You)', '')}: Payment of ${fiatSym}${formatMinor2(order.grossFiatMinor)} ${order.fiatCurrency} (Ref: ${order.paymentReference || 'UTR-VERIFIED'}) is completed...`}
+                  className="flex-1 px-3.5 py-2.5 text-xs bg-[#0B0E14] border border-white/15 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-400"
+                />
+                <button
+                  type="button"
+                  data-testid="send-payment-completion-notify-btn"
+                  disabled={notifyBusy}
+                  onClick={() => handleSendPaymentCompletionNotification()}
+                  className="px-5 py-2.5 text-xs font-bold text-[#0B0E14] bg-emerald-400 hover:bg-emerald-300 rounded-xl transition-colors cursor-pointer inline-flex items-center justify-center gap-2 shrink-0 shadow-md"
+                >
+                  <BellRing className="w-4 h-4" />
+                  <span>
+                    {notifyBusy ? 'Sending Alert...' : 'Notify User of Payment Completion'}
+                  </span>
+                </button>
+              </div>
+
+              {notifySentBanner && (
+                <div
+                  data-testid="payment-completion-notify-success"
+                  className="p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs text-emerald-200 flex items-center justify-between gap-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>{notifySentBanner}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setNotifySentBanner(null)}
+                    className="text-emerald-300/70 hover:text-white cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

@@ -14,22 +14,21 @@ import {
   type WalletChallenge,
   type LivePriceFeed,
   type UserProfile,
-  type OrderSoundNotificationEvent,
-  type SoundNotificationTrigger,
   type CryptoAsset,
   type OfferRecord,
   type SwapChainId,
   type SwapExecutionRecord,
+  type MarketTweetRecord,
+  type MarketTweetOrderAttachment,
   SUPPORTED_SWAP_CHAINS,
   calculateCrossChainSwapQuote,
   validateSwapChainDestinationAddress,
   updateLiveReferenceRates,
-  detectOrderStatusSoundEvents,
-  getSoundPingAcousticProfile,
 } from './types';
 import {
   createWalletChallenge,
   formatMicro6,
+  formatMinor2,
   getLockedFiatForCountry,
   parseCryptoToMicro,
   parseFiatToMinor,
@@ -38,16 +37,17 @@ import {
   verifyUserCredentials,
   verifyWalletChallenge,
 } from './core/escrowEngine';
-import {
-  isSoundNotificationEnabled,
-  playOrderStatusPing,
-  setSoundNotificationEnabled,
-} from './utils/soundNotification';
-import { Volume2, X as CloseIcon } from 'lucide-react';
+import { BellRing, CheckCircle2, X as CloseIcon } from 'lucide-react';
 import { Navbar, type GlobalSearchSelection } from './components/Navbar';
 import { HomeView } from './components/HomeView';
 import { MarketplaceView } from './components/MarketplaceView';
 import { SwapView } from './components/SwapView';
+import {
+  SocialPulseView,
+  INITIAL_MARKET_TWEETS,
+  formatUserHandle,
+  getDefaultAvatarForUser,
+} from './components/SocialPulseView';
 import { CreateOfferView } from './components/CreateOfferView';
 import { OrdersView } from './components/OrdersView';
 import { DashboardView } from './components/DashboardView';
@@ -142,64 +142,39 @@ export default function App() {
     return 'day';
   });
 
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(() => isSoundNotificationEnabled());
-  const [recentSoundEvent, setRecentSoundEvent] = useState<OrderSoundNotificationEvent | null>(null);
-  const previousOrderStatesRef = useRef<Record<string, string>>({});
-  const hasHydratedOrdersRef = useRef<boolean>(false);
-
-  const handleToggleSound = useCallback(() => {
-    setSoundEnabled((prev) => {
-      const next = !prev;
-      setSoundNotificationEnabled(next);
-      if (next) {
-        playOrderStatusPing('PENDING_PAYMENT', { forcePlayWhenMuted: true });
+  const [marketTweets, setMarketTweets] = useState<MarketTweetRecord[]>(() => {
+    try {
+      const saved = window.localStorage.getItem('costorah_market_tweets_v1');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
-      return next;
-    });
-  }, []);
-
-  const handleTriggerPingPreview = useCallback(
-    (trigger: SoundNotificationTrigger, orderId?: string) => {
-      playOrderStatusPing(trigger, { forcePlayWhenMuted: true });
-      setRecentSoundEvent({
-        orderId: orderId || activeOrderId || 'ord_active_1001',
-        nextState: trigger,
-        trigger,
-        profile: getSoundPingAcousticProfile(trigger),
-        timestamp: new Date().toISOString(),
-      });
-    },
-    [activeOrderId]
-  );
-
-  // Detect order status transitions into PENDING_PAYMENT ('PAYMENT_PENDING') or TRADE_COMPLETED ('COMPLETED')
-  useEffect(() => {
-    if (!state?.orders) return;
-    const isInitial = !hasHydratedOrdersRef.current;
-    const { events, updatedStateMap } = detectOrderStatusSoundEvents(
-      previousOrderStatesRef.current,
-      state.orders,
-      isInitial
-    );
-    previousOrderStatesRef.current = updatedStateMap;
-    hasHydratedOrdersRef.current = true;
-
-    if (events.length > 0) {
-      const latestEvent = events[events.length - 1];
-      if (soundEnabled) {
-        playOrderStatusPing(latestEvent.trigger);
-      }
-      setRecentSoundEvent(latestEvent);
+    } catch {
+      // ignore storage errors
     }
-  }, [state?.orders, soundEnabled]);
+    return INITIAL_MARKET_TWEETS;
+  });
 
   useEffect(() => {
-    if (!recentSoundEvent) return;
-    const timerId = window.setTimeout(() => {
-      setRecentSoundEvent(null);
-    }, 6000);
-    return () => window.clearTimeout(timerId);
-  }, [recentSoundEvent]);
+    try {
+      window.localStorage.setItem('costorah_market_tweets_v1', JSON.stringify(marketTweets));
+    } catch {
+      // ignore storage errors
+    }
+  }, [marketTweets]);
+
+  const [paymentAlertToast, setPaymentAlertToast] = useState<{
+    orderId: string;
+    title: string;
+    message: string;
+    channel: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!paymentAlertToast) return;
+    const t = window.setTimeout(() => setPaymentAlertToast(null), 7000);
+    return () => window.clearTimeout(t);
+  }, [paymentAlertToast]);
 
   const handleToggleTheme = () => {
     setTheme((prev) => {
@@ -550,6 +525,14 @@ export default function App() {
           id: `usr_${Date.now().toString(36)}`,
           displayName: cleanName,
           email: cleanEmail,
+          avatarUrl:
+            typeof payload.avatarUrl === 'string' && payload.avatarUrl.trim()
+              ? payload.avatarUrl.trim()
+              : undefined,
+          bio:
+            typeof payload.bio === 'string' && payload.bio.trim()
+              ? payload.bio.trim()
+              : 'Verified P2P Escrow Trader',
           countryCode: selectedCountry,
           preferredFiat: lockedFiat,
           role: 'USER',
@@ -1023,7 +1006,9 @@ export default function App() {
       const asset = (payload.asset || 'USDT') as CryptoAsset;
       const fiatCurrency = (payload.fiatCurrency || 'INR') as FiatCurrency;
       const unitPriceFiatMinor = parseFiatToMinor(String(payload.unitPriceFiat || '95.00'));
-      const availableQuantityMicro = parseCryptoToMicro(String(payload.availableQuantity || '100'));
+      const availableQuantityMicro = parseCryptoToMicro(
+        String(payload.totalQuantityCrypto || payload.availableQuantity || '100')
+      );
       const totalFiatMinor = Math.max(
         1,
         Math.round((availableQuantityMicro * unitPriceFiatMinor) / 1_000_000)
@@ -1181,6 +1166,59 @@ export default function App() {
       return { offer: updatedOffer, state: nextState };
     }
 
+    if (url.startsWith('/api/orders/') && url.endsWith('/notify-payment')) {
+      const orderId = url.replace('/api/orders/', '').replace('/notify-payment', '');
+      const targetOrder = state.orders.find((o) => o.id === orderId);
+      if (!targetOrder) {
+        throw new Error('Order not found.');
+      }
+      const isBuyerActor = state.currentUser.id === targetOrder.buyerId;
+      const recipientId = isBuyerActor ? targetOrder.sellerId : targetOrder.buyerId;
+      const recipientUser = state.allUsers.find((u) => u.id === recipientId);
+      const selectedChannel: 'IN_APP' | 'EMAIL' | 'BOTH' =
+        payload.channel === 'EMAIL' || payload.channel === 'BOTH' ? payload.channel : 'IN_APP';
+      const customMessage = String(
+        payload.customMessage ||
+          `Payment for Order #${orderId} is completed (${targetOrder.paymentReference || 'UTR-VERIFIED'}).`
+      ).trim();
+
+      const newMsg = {
+        id: `msg_notif_${Date.now()}`,
+        orderId,
+        senderId: state.currentUser.id,
+        senderName: state.currentUser.displayName,
+        senderRole: (state.currentUser.role === 'ADMIN'
+          ? 'ADMIN'
+          : isBuyerActor
+          ? 'BUYER'
+          : 'SELLER') as 'ADMIN' | 'BUYER' | 'SELLER',
+        content: `🔔 PAYMENT COMPLETION ALERT TO ${(recipientUser?.displayName || recipientId).toUpperCase()}: ${customMessage}`,
+        createdAt: new Date().toISOString(),
+      };
+
+      const newNotif = {
+        id: `notif_${Date.now()}`,
+        userId: state.currentUser.id,
+        title: `Payment Completion Alert — Order #${orderId}`,
+        message: `To ${recipientUser?.displayName || 'Counterparty'}: "${customMessage}"`,
+        orderId,
+        channel: selectedChannel,
+        read: false,
+        createdAt: new Date().toISOString(),
+      };
+
+      const nextState: AppStateSnapshot = {
+        ...state,
+        messages: {
+          ...state.messages,
+          [orderId]: [...(state.messages[orderId] || []), newMsg],
+        },
+        notifications: [newNotif, ...(state.notifications || [])],
+      };
+      setState(nextState);
+      return { order: targetOrder, state: nextState };
+    }
+
     return state;
   };
 
@@ -1300,7 +1338,7 @@ export default function App() {
   return (
     <div
       data-theme={theme}
-      className={`min-h-screen flex flex-col transition-colors ${
+      className={`min-h-screen flex flex-col overflow-x-hidden transition-colors ${
         isDay ? 'bg-[#F4F8FC] text-slate-900' : 'bg-[#0B0E14] text-[#F1F5F9]'
       }`}
     >
@@ -1315,65 +1353,73 @@ export default function App() {
         }}
         theme={theme}
         onToggleTheme={handleToggleTheme}
-        soundEnabled={soundEnabled}
-        onToggleSound={handleToggleSound}
         offers={state.offers}
         orders={state.orders}
         allUsers={state.allUsers}
         balances={state.balances}
         livePriceFeed={livePriceFeed}
         supportedPaymentMethods={state.supportedPaymentMethods}
+        notifications={state.notifications}
+        onOpenOrderFromNotification={(orderId) => {
+          setActiveOrderId(orderId);
+          setActiveRoute('trade-room');
+        }}
         onGlobalSearchSelect={(selection) => {
           setExternalSearchSelection({ ...selection });
           setActiveRoute('marketplace');
         }}
       />
 
-      {/* Subtle Browser Sound Notification Banner when an order enters PENDING_PAYMENT or TRADE_COMPLETED */}
-      {recentSoundEvent && (
+      {/* Visual Payment Completion Alert Toast Banner */}
+      {paymentAlertToast && (
         <div
-          data-testid="sound-notification-toast"
+          data-testid="payment-completion-alert-toast"
           role="status"
           aria-live="polite"
-          className={`fixed bottom-16 lg:bottom-6 right-4 z-50 max-w-sm w-full rounded-xl border p-3.5 shadow-2xl backdrop-blur-md transition-all ${
+          className={`fixed bottom-20 lg:bottom-6 left-3 right-3 sm:left-auto sm:right-4 z-50 sm:max-w-md sm:w-full rounded-2xl border p-3.5 sm:p-4 shadow-2xl backdrop-blur-md transition-all ${
             isDay
-              ? 'bg-white/95 border-emerald-300 text-slate-900'
-              : 'bg-[#131A24]/95 border-emerald-500/45 text-slate-100'
+              ? 'bg-white/95 border-emerald-400 text-slate-900'
+              : 'bg-[#0F1724]/95 border-emerald-500/50 text-slate-100'
           }`}
         >
           <div className="flex items-start justify-between gap-3">
-            <div className="flex items-start gap-2.5">
-              <div
-                className={`p-2 rounded-lg border shrink-0 mt-0.5 ${
-                  recentSoundEvent.trigger === 'TRADE_COMPLETED'
-                    ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400'
-                    : 'bg-amber-500/15 border-amber-500/40 text-amber-400'
-                }`}
-              >
-                <Volume2 className="w-4 h-4" />
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-xl bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 shrink-0 mt-0.5">
+                <BellRing className="w-4 h-4" />
               </div>
-              <div className="space-y-0.5 font-mono">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                    Audio Ping · {recentSoundEvent.profile.statusLabel}
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400">
+                    {paymentAlertToast.title}
+                  </span>
+                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    {paymentAlertToast.channel}
                   </span>
                 </div>
-                <div className="text-xs font-bold">
-                  Order <span className="text-emerald-400">{recentSoundEvent.orderId}</span> →{' '}
-                  <span>{recentSoundEvent.profile.statusLabel}</span>
+                <p className="text-xs leading-relaxed opacity-90">{paymentAlertToast.message}</p>
+                <div className="pt-1 flex items-center gap-3 text-[11px] font-mono">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveOrderId(paymentAlertToast.orderId);
+                      setActiveRoute('trade-room');
+                      setPaymentAlertToast(null);
+                    }}
+                    className="text-emerald-400 hover:underline font-bold cursor-pointer inline-flex items-center gap-1"
+                  >
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Open Order #{paymentAlertToast.orderId}</span>
+                  </button>
                 </div>
-                <p className="text-[11px] text-slate-400 font-sans leading-snug">
-                  {recentSoundEvent.profile.description}
-                </p>
               </div>
             </div>
             <button
               type="button"
-              onClick={() => setRecentSoundEvent(null)}
+              onClick={() => setPaymentAlertToast(null)}
               className="text-slate-400 hover:text-slate-200 p-1 cursor-pointer"
-              aria-label="Dismiss sound notification"
+              aria-label="Dismiss payment alert"
             >
-              <CloseIcon className="w-3.5 h-3.5" />
+              <CloseIcon className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -1456,6 +1502,159 @@ export default function App() {
           />
         )}
 
+        {activeRoute === 'pulse' && (
+          <SocialPulseView
+            currentUser={state.currentUser}
+            allUsers={state.allUsers}
+            offers={state.offers}
+            orders={state.orders}
+            tweets={marketTweets}
+            livePriceFeed={livePriceFeed}
+            theme={theme}
+            onCreateTweet={async (tweetPayload) => {
+              const newTweet: MarketTweetRecord = {
+                id: `tw_${Date.now().toString(36)}`,
+                authorId: state.currentUser.id,
+                authorName: state.currentUser.displayName.replace(' (You)', ''),
+                authorHandle: formatUserHandle(
+                  state.currentUser.displayName,
+                  state.currentUser.email
+                ),
+                authorAvatarUrl:
+                  state.currentUser.avatarUrl || getDefaultAvatarForUser(state.currentUser),
+                authorVerified: true,
+                authorReputationScore: state.currentUser.reputationScore,
+                content: tweetPayload.content,
+                sentiment: tweetPayload.sentiment,
+                taggedAssets: tweetPayload.taggedAssets,
+                taggedUserHandles: tweetPayload.taggedUserHandles,
+                imageUrl: tweetPayload.imageUrl,
+                imageCaption: tweetPayload.imageCaption,
+                orderAttachment: tweetPayload.orderAttachment,
+                likedByUserIds: [],
+                retweetedByUserIds: [],
+                comments: [],
+                createdAt: new Date().toISOString(),
+              };
+              setMarketTweets((prev) => [newTweet, ...prev]);
+            }}
+            onToggleLikeTweet={async (tweetId) => {
+              const uid = state.currentUser.id;
+              setMarketTweets((prev) =>
+                prev.map((t) => {
+                  if (t.id !== tweetId) return t;
+                  const already = t.likedByUserIds.includes(uid);
+                  return {
+                    ...t,
+                    likedByUserIds: already
+                      ? t.likedByUserIds.filter((id) => id !== uid)
+                      : [...t.likedByUserIds, uid],
+                  };
+                })
+              );
+            }}
+            onRetweet={async (tweetId, quoteComment) => {
+              const uid = state.currentUser.id;
+              const target = marketTweets.find((t) => t.id === tweetId);
+              if (!target) return;
+              if (quoteComment && quoteComment.trim()) {
+                const quoteTw: MarketTweetRecord = {
+                  id: `tw_rt_${Date.now().toString(36)}`,
+                  authorId: state.currentUser.id,
+                  authorName: state.currentUser.displayName.replace(' (You)', ''),
+                  authorHandle: formatUserHandle(
+                    state.currentUser.displayName,
+                    state.currentUser.email
+                  ),
+                  authorAvatarUrl:
+                    state.currentUser.avatarUrl || getDefaultAvatarForUser(state.currentUser),
+                  authorVerified: true,
+                  authorReputationScore: state.currentUser.reputationScore,
+                  content: quoteComment.trim(),
+                  sentiment: target.sentiment,
+                  taggedAssets: target.taggedAssets,
+                  taggedUserHandles: Array.from(
+                    new Set([...target.taggedUserHandles, target.authorHandle])
+                  ),
+                  imageUrl: target.imageUrl,
+                  imageCaption: target.imageCaption,
+                  orderAttachment: target.orderAttachment,
+                  likedByUserIds: [],
+                  retweetedByUserIds: [],
+                  retweetOfId: target.id,
+                  retweetedByName: state.currentUser.displayName.replace(' (You)', ''),
+                  retweetedByHandle: formatUserHandle(
+                    state.currentUser.displayName,
+                    state.currentUser.email
+                  ),
+                  comments: [],
+                  createdAt: new Date().toISOString(),
+                };
+                setMarketTweets((prev) => [
+                  quoteTw,
+                  ...prev.map((t) =>
+                    t.id === tweetId && !t.retweetedByUserIds.includes(uid)
+                      ? { ...t, retweetedByUserIds: [...t.retweetedByUserIds, uid] }
+                      : t
+                  ),
+                ]);
+              } else {
+                setMarketTweets((prev) =>
+                  prev.map((t) => {
+                    if (t.id !== tweetId) return t;
+                    const already = t.retweetedByUserIds.includes(uid);
+                    return {
+                      ...t,
+                      retweetedByUserIds: already
+                        ? t.retweetedByUserIds.filter((id) => id !== uid)
+                        : [...t.retweetedByUserIds, uid],
+                    };
+                  })
+                );
+              }
+            }}
+            onAddComment={async (tweetId, content) => {
+              const newComment = {
+                id: `cmt_${Date.now().toString(36)}`,
+                tweetId,
+                authorId: state.currentUser.id,
+                authorName: state.currentUser.displayName.replace(' (You)', ''),
+                authorHandle: formatUserHandle(
+                  state.currentUser.displayName,
+                  state.currentUser.email
+                ),
+                authorAvatarUrl:
+                  state.currentUser.avatarUrl || getDefaultAvatarForUser(state.currentUser),
+                content,
+                createdAt: new Date().toISOString(),
+              };
+              setMarketTweets((prev) =>
+                prev.map((t) =>
+                  t.id === tweetId ? { ...t, comments: [...t.comments, newComment] } : t
+                )
+              );
+            }}
+            onDeleteTweet={async (tweetId) => {
+              setMarketTweets((prev) => prev.filter((t) => t.id !== tweetId));
+            }}
+            onUpdateProfile={async (profilePayload) => {
+              await apiPost('/api/user/profile', profilePayload);
+            }}
+            onNavigateMarketplace={(offerId, asset) => {
+              setExternalSearchSelection({
+                offerId,
+                asset: asset || 'ALL',
+              });
+              setActiveRoute('marketplace');
+            }}
+            onOpenTradeRoom={(orderId) => {
+              setActiveOrderId(orderId);
+              setActiveRoute('trade-room');
+            }}
+            onNavigateCreateOffer={() => setActiveRoute('create-offer')}
+          />
+        )}
+
         {activeRoute === 'create-offer' && (
           <CreateOfferView
             balances={state.balances}
@@ -1468,8 +1667,49 @@ export default function App() {
             supportedPaymentMethods={state.supportedPaymentMethods}
             feeBps={state.feeBps}
             livePriceFeed={livePriceFeed}
+            onNavigatePulse={() => setActiveRoute('pulse')}
             onCreateOffer={async (payload) => {
-              await apiPost('/api/offers', payload);
+              const res = await apiPost<{ offer?: OfferRecord }>('/api/offers', payload);
+              if (payload.postAsTweet) {
+                const createdOffer = res?.offer;
+                const attachment: MarketTweetOrderAttachment = {
+                  offerId: createdOffer?.id,
+                  side: payload.side,
+                  asset: payload.asset,
+                  fiatCurrency: payload.fiatCurrency,
+                  unitPriceFormatted: payload.unitPriceFiat,
+                  quantityFormatted: payload.totalQuantityCrypto,
+                  minOrderFormatted: payload.minOrderFiat,
+                  maxOrderFormatted: payload.maxOrderFiat,
+                  paymentMethods: payload.paymentMethods,
+                };
+                const orderTweet: MarketTweetRecord = {
+                  id: `tw_ord_${Date.now().toString(36)}`,
+                  authorId: state.currentUser.id,
+                  authorName: state.currentUser.displayName.replace(' (You)', ''),
+                  authorHandle: formatUserHandle(
+                    state.currentUser.displayName,
+                    state.currentUser.email
+                  ),
+                  authorAvatarUrl:
+                    state.currentUser.avatarUrl || getDefaultAvatarForUser(state.currentUser),
+                  authorVerified: true,
+                  authorReputationScore: state.currentUser.reputationScore,
+                  content:
+                    payload.tweetContent ||
+                    `Published a new P2P ${payload.side} Order: ${payload.totalQuantityCrypto} $${payload.asset} @ ${payload.unitPriceFiat} ${payload.fiatCurrency}! #Bitcoin #Ethereum #${payload.asset}`,
+                  sentiment: payload.tweetSentiment || 'ORDER_ALERT',
+                  taggedAssets: payload.tweetTaggedAssets || [payload.asset, 'BTC', 'ETH'],
+                  taggedUserHandles: [],
+                  imageUrl: payload.tweetImageUrl,
+                  orderAttachment: attachment,
+                  likedByUserIds: [],
+                  retweetedByUserIds: [],
+                  comments: [],
+                  createdAt: new Date().toISOString(),
+                };
+                setMarketTweets((prev) => [orderTweet, ...prev]);
+              }
             }}
             onUpdateOfferStatus={async (offerId, action) => {
               await apiPost(`/api/offers/${offerId}/status`, { action });
@@ -1526,6 +1766,18 @@ export default function App() {
             }}
             onCancelOrder={async (orderId, reason) => {
               await apiPost(`/api/orders/${orderId}/cancel`, { reason });
+            }}
+            onNotifyPaymentCompleted={async ({ orderId, customMessage, channel }) => {
+              await apiPost(`/api/orders/${orderId}/notify-payment`, {
+                customMessage,
+                channel,
+              });
+              setPaymentAlertToast({
+                orderId,
+                title: `Payment Completion Alert Dispatched`,
+                message: customMessage,
+                channel: channel === 'BOTH' ? 'In-App + Email + Chat' : 'In-App + Chat',
+              });
             }}
             onNavigateToMarket={() => setActiveRoute('marketplace')}
           />
@@ -1601,6 +1853,12 @@ export default function App() {
               await apiPost(`/api/orders/${orderId}/release`, {
                 idempotencyKey: `rel_${orderId}_${Date.now()}`,
               });
+              setPaymentAlertToast({
+                orderId,
+                title: `Payment & Escrow Settlement Completed`,
+                message: `Counterparty has been alerted that payment is verified and escrowed crypto has been released.`,
+                channel: 'In-App + Email + Chat',
+              });
             }}
             onOpenDispute={async (orderId, reason) => {
               await apiPost(`/api/orders/${orderId}/dispute`, { reason });
@@ -1611,9 +1869,18 @@ export default function App() {
             onCancelOrder={async (orderId, reason) => {
               await apiPost(`/api/orders/${orderId}/cancel`, { reason });
             }}
-            soundEnabled={soundEnabled}
-            onToggleSound={handleToggleSound}
-            onTestPing={(trigger) => handleTriggerPingPreview(trigger, activeOrder.id)}
+            onNotifyPaymentCompleted={async ({ orderId, customMessage, channel }) => {
+              await apiPost(`/api/orders/${orderId}/notify-payment`, {
+                customMessage,
+                channel,
+              });
+              setPaymentAlertToast({
+                orderId,
+                title: `Payment Completion Alert Dispatched`,
+                message: customMessage,
+                channel: channel === 'BOTH' ? 'In-App + Email + Chat' : 'In-App + Chat',
+              });
+            }}
           />
         )}
 
@@ -1669,7 +1936,7 @@ export default function App() {
 
       {/* Quiet Footer */}
       <footer
-        className={`border-t py-8 px-4 sm:px-8 mt-12 transition-colors ${
+        className={`border-t pt-8 pb-24 lg:py-8 px-4 sm:px-8 mt-8 sm:mt-12 transition-colors ${
           isDay
             ? 'border-slate-200 bg-white text-slate-600'
             : 'border-white/[0.08] bg-[#0B0E14] text-slate-500'
@@ -1730,6 +1997,9 @@ export default function App() {
         livePriceFeed={livePriceFeed}
         onUserLogin={async (params) => {
           await apiPost('/api/auth/user-login', params);
+        }}
+        onUpdateProfile={async (profilePayload) => {
+          await apiPost('/api/user/profile', profilePayload);
         }}
         onAdminLogin={async (username, password) => {
           await apiPost('/api/auth/admin-login', { username, password });

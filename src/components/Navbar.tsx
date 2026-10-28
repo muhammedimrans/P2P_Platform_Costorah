@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeftRight,
   ArrowRight,
+  Bell,
   ChevronRight,
   CreditCard,
   FileText,
@@ -9,6 +10,7 @@ import {
   LayoutDashboard,
   Lock,
   Menu,
+  MessageSquare,
   Moon,
   PlusCircle,
   Search,
@@ -16,8 +18,6 @@ import {
   Store,
   Sun,
   UserCheck,
-  Volume2,
-  VolumeX,
   Wallet,
   X,
 } from 'lucide-react';
@@ -33,6 +33,7 @@ import {
   type FiatCurrency,
   type LivePriceFeed,
   type OfferRecord,
+  type NotificationItem,
   type UserProfile,
 } from '../types';
 import { formatMicro6, formatMinor2 } from '../core/escrowEngine';
@@ -58,22 +59,23 @@ interface NavbarProps {
   onOpenAccountModal: (tab?: AccountModalTab) => void;
   theme?: 'day' | 'night';
   onToggleTheme?: () => void;
-  soundEnabled?: boolean;
-  onToggleSound?: () => void;
   offers?: OfferRecord[];
   orders?: EscrowOrderRecord[];
   allUsers?: UserProfile[];
   balances?: AssetBalance[];
   livePriceFeed?: LivePriceFeed;
   supportedPaymentMethods?: Record<FiatCurrency, string[]>;
+  notifications?: NotificationItem[];
+  onOpenOrderFromNotification?: (orderId: string) => void;
   onGlobalSearchSelect?: (selection: GlobalSearchSelection) => void;
 }
 
 const NAV_ITEMS: { route: AppRoute; label: string; icon: React.ReactNode }[] = [
   { route: 'home', label: 'Home', icon: <Home className="w-4 h-4" /> },
-  { route: 'marketplace', label: 'Market', icon: <Store className="w-4 h-4" /> },
+  { route: 'marketplace', label: 'P2P Market', icon: <Store className="w-4 h-4" /> },
+  { route: 'pulse', label: 'Trader Feed', icon: <MessageSquare className="w-4 h-4" /> },
   { route: 'swap', label: 'Swap', icon: <ArrowLeftRight className="w-4 h-4" /> },
-  { route: 'create-offer', label: 'Post Buy/Sell Ad', icon: <PlusCircle className="w-4 h-4" /> },
+  { route: 'create-offer', label: 'Post Ad', icon: <PlusCircle className="w-4 h-4" /> },
   { route: 'orders', label: 'Orders', icon: <FileText className="w-4 h-4" /> },
   { route: 'dashboard', label: 'Profile', icon: <LayoutDashboard className="w-4 h-4" /> },
   { route: 'admin', label: 'Admin', icon: <Lock className="w-4 h-4" /> },
@@ -86,14 +88,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAccountModal,
   theme = 'day',
   onToggleTheme,
-  soundEnabled = true,
-  onToggleSound,
   offers = [],
   orders = [],
   allUsers = [],
   balances = [],
   livePriceFeed,
   supportedPaymentMethods,
+  notifications = [],
+  onOpenOrderFromNotification,
   onGlobalSearchSelect,
 }) => {
   const shortName = currentUser.displayName.replace(' (You)', '').split(' ')[0];
@@ -105,6 +107,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [walletBreakdownOpen, setWalletBreakdownOpen] = useState<boolean>(false);
+  const [notificationsOpen, setNotificationsOpen] = useState<boolean>(false);
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
   const walletBreakdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -186,6 +189,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         !walletBreakdownRef.current.contains(e.target as Node)
       ) {
         setWalletBreakdownOpen(false);
+        setNotificationsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -282,7 +286,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header
-      className={`sticky top-0 z-40 flex flex-wrap lg:flex-nowrap items-center justify-between gap-y-2.5 gap-x-4 px-4 sm:px-8 py-3 border-b transition-colors ${
+      className={`sticky top-0 z-40 flex flex-wrap lg:flex-nowrap items-center justify-between gap-y-2 gap-x-2 sm:gap-x-4 px-3 sm:px-8 py-2.5 sm:py-3 border-b transition-colors ${
         isDay
           ? 'bg-white/95 backdrop-blur-md border-slate-200 text-slate-900 shadow-[0_2px_12px_rgba(15,23,42,0.04)]'
           : 'bg-[#0B0E14]/95 backdrop-blur-md border-white/[0.08] text-slate-100'
@@ -296,19 +300,19 @@ export const Navbar: React.FC<NavbarProps> = ({
           e.preventDefault();
           onNavigate('home');
         }}
-        className="flex items-center gap-3 whitespace-nowrap shrink-0 group"
+        className="flex items-center gap-2 sm:gap-3 whitespace-nowrap shrink-0 group"
       >
-        <CostorahLogoIcon className="w-11 h-11 shrink-0 drop-shadow-sm transition-transform group-hover:scale-105" />
+        <CostorahLogoIcon className="w-8 h-8 sm:w-11 sm:h-11 shrink-0 drop-shadow-sm transition-transform group-hover:scale-105" />
         <div className="flex flex-col leading-none">
           <span
-            className={`text-xl font-black tracking-tight font-display ${
+            className={`text-base sm:text-xl font-black tracking-tight font-display ${
               isDay ? 'text-[#0B65C6]' : 'text-slate-100'
             }`}
           >
             COSTO<span className={isDay ? 'text-emerald-600' : 'text-emerald-400'}>RAH</span>
           </span>
           <span
-            className={`text-[9px] font-mono font-bold uppercase tracking-widest mt-0.5 ${
+            className={`text-[8px] sm:text-[9px] font-mono font-bold uppercase tracking-widest mt-0.5 ${
               isDay ? 'text-slate-500' : 'text-slate-400'
             }`}
           >
@@ -351,7 +355,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span>{item.label}</span>
                 {item.route === 'orders' && activeOrdersCount > 0 && (
                   <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-500 text-[#020617]">
-                    {activeOrdersCount}
+                    ({activeOrdersCount})
                   </span>
                 )}
               </a>
@@ -569,45 +573,35 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Zone 3: Sound Ping Toggle + Day/Night Theme Switcher + Active Account Action + Wallet Holding Balance Below on Right */}
+      {/* Zone 3: Alerts Bell + Day/Night Theme Switcher + Active Account Action + Wallet Holding Balance Below on Right */}
       <div
         ref={walletBreakdownRef}
-        className="relative flex flex-col items-end gap-1.5 shrink-0"
+        className="relative flex flex-col items-end gap-1 sm:gap-1.5 shrink-0 max-w-full"
       >
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          {onToggleSound && (
-            <button
-              type="button"
-              data-testid="sound-notification-toggle-btn"
-              onClick={onToggleSound}
-              title={
-                soundEnabled
-                  ? 'Sound Notifications Active: Plays a subtle ping tone on PENDING_PAYMENT and TRADE_COMPLETED (Click to Mute)'
-                  : 'Sound Notifications Muted (Click to Enable order status ping tones)'
-              }
-              className={`p-2 sm:px-2.5 sm:py-2 rounded-lg text-xs font-mono font-bold inline-flex items-center gap-1.5 border transition-colors cursor-pointer ${
-                soundEnabled
-                  ? isDay
-                    ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border-emerald-300'
-                    : 'bg-[#141C2B] hover:bg-[#1C2638] text-emerald-400 border-emerald-500/35'
-                  : isDay
-                  ? 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-300'
-                  : 'bg-[#141C2B] hover:bg-[#1C2638] text-slate-400 border-white/15'
-              }`}
-            >
-              {soundEnabled ? (
-                <>
-                  <Volume2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                  <span className="hidden xl:inline">Ping On</span>
-                </>
-              ) : (
-                <>
-                  <VolumeX className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                  <span className="hidden xl:inline">Muted</span>
-                </>
-              )}
-            </button>
-          )}
+        <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
+          {/* Payment & Order Alerts Dropdown Trigger */}
+          <button
+            type="button"
+            data-testid="navbar-notifications-btn"
+            onClick={() => {
+              setNotificationsOpen((prev) => !prev);
+              setWalletBreakdownOpen(false);
+            }}
+            title="Payment Completion Alerts & Order Notifications"
+            className={`relative p-1.5 sm:px-2.5 sm:py-2 rounded-lg text-xs font-mono font-bold inline-flex items-center gap-1 sm:gap-1.5 border transition-colors cursor-pointer ${
+              isDay
+                ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300'
+                : 'bg-[#141C2B] hover:bg-[#1C2638] text-emerald-400 border-white/15'
+            }`}
+          >
+            <Bell className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+            <span className="hidden xl:inline">Alerts</span>
+            {notifications.length > 0 && (
+              <span className="px-1 sm:px-1.5 py-0.2 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-500 text-[#020617]">
+                {notifications.length}
+              </span>
+            )}
+          </button>
 
           {onToggleTheme && (
             <button
@@ -615,7 +609,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               data-testid="theme-toggle-btn"
               onClick={onToggleTheme}
               title={isDay ? 'Switch to Night Mode' : 'Switch to Day Mode'}
-              className={`p-2 sm:px-3 sm:py-2 rounded-lg text-xs font-mono font-bold inline-flex items-center gap-1.5 border transition-colors cursor-pointer ${
+              className={`p-1.5 sm:px-3 sm:py-2 rounded-lg text-xs font-mono font-bold inline-flex items-center gap-1.5 border transition-colors cursor-pointer ${
                 isDay
                   ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300'
                   : 'bg-[#141C2B] hover:bg-[#1C2638] text-emerald-400 border-white/15'
@@ -640,7 +634,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               type="button"
               data-testid="navbar-connected-wallet-btn"
               onClick={() => onOpenAccountModal('CONNECT_WALLET')}
-              className={`px-2.5 sm:px-3 py-1.5 text-xs font-mono font-bold rounded-lg border transition-all whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 shadow-xs ${
+              className={`px-2 sm:px-3 py-1.5 text-[11px] sm:text-xs font-mono font-bold rounded-lg border transition-all whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1 sm:gap-1.5 shadow-xs ${
                 isDay
                   ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border-emerald-500'
                   : 'bg-emerald-950/70 hover:bg-emerald-900/70 text-emerald-300 border-emerald-500/50'
@@ -673,7 +667,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               type="button"
               data-testid="navbar-connect-wallet-btn"
               onClick={() => onOpenAccountModal('CONNECT_WALLET')}
-              className={`px-2.5 sm:px-3 py-1.5 text-xs font-mono font-bold rounded-lg border transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 ${
+              className={`px-2 sm:px-3 py-1.5 text-[11px] sm:text-xs font-mono font-bold rounded-lg border transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1 sm:gap-1.5 ${
                 isDay
                   ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-700 shadow-xs'
                   : 'bg-[#141C2B] hover:bg-[#1C2638] text-emerald-400 border-emerald-500/40'
@@ -689,7 +683,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             type="button"
             data-testid="navbar-account-btn"
             onClick={() => onOpenAccountModal('USER_LOGIN')}
-            className={`px-2.5 sm:px-3 py-1.5 text-xs font-bold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 ${
+            className={`px-2 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1 sm:gap-1.5 ${
               isDay
                 ? 'bg-[#0B65C6] hover:bg-[#0953A6] text-white shadow-sm'
                 : 'bg-emerald-400 hover:bg-emerald-300 text-[#0B0E14]'
@@ -699,7 +693,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <img
                 src={currentUser.avatarUrl}
                 alt={shortName}
-                className="w-5 h-5 rounded-full object-cover border border-white/40 shrink-0"
+                className="w-4 h-4 sm:w-5 sm:h-5 rounded-full object-cover border border-white/40 shrink-0"
               />
             ) : (
               <UserCheck className="w-3.5 h-3.5 shrink-0" />
@@ -709,7 +703,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 ? 'Admin'
                 : `${shortName} · ${countryCode}/${lockedFiat}`}
             </span>
-            <span className="inline md:hidden">{shortName}</span>
+            <span className="inline md:hidden max-w-[64px] truncate">{shortName}</span>
           </button>
 
           {/* Mobile Hamburger Menu Toggle Button */}
@@ -718,7 +712,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
             data-testid="navbar-mobile-menu-toggle"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
-            className={`lg:hidden p-2 rounded-lg border transition-colors cursor-pointer shrink-0 ${
+            className={`lg:hidden p-1.5 sm:p-2 rounded-lg border transition-colors cursor-pointer shrink-0 ${
               isDay
                 ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300'
                 : 'bg-[#141C2B] hover:bg-[#1C2638] text-slate-200 border-white/15'
@@ -734,7 +728,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           data-testid="navbar-wallet-holding-balance"
           onClick={() => setWalletBreakdownOpen((prev) => !prev)}
           title="Click to inspect your crypto holdings and total Rupee (INR) worth"
-          className={`px-2.5 py-1 rounded-lg border text-[11px] font-mono tabular-nums inline-flex items-center gap-1.5 transition-colors cursor-pointer ${
+          className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg border text-[10px] sm:text-[11px] font-mono tabular-nums inline-flex items-center gap-1 sm:gap-1.5 transition-colors cursor-pointer max-w-full truncate ${
             isDay
               ? 'bg-emerald-50/90 hover:bg-emerald-100 border-emerald-300 text-slate-900'
               : 'bg-[#131A24] hover:bg-[#1A2433] border-emerald-500/35 text-slate-200'
@@ -742,20 +736,94 @@ export const Navbar: React.FC<NavbarProps> = ({
         >
           <Wallet className={`w-3 h-3 shrink-0 ${isDay ? 'text-emerald-700' : 'text-emerald-400'}`} />
           <span className="text-slate-400 hidden sm:inline">Holding:</span>
-          <span className="font-bold">
+          <span className="font-bold truncate">
             {walletHoldingSummary.usdtFormatted} USDT
           </span>
           <span className="text-slate-500">·</span>
-          <span className={`font-bold ${isDay ? 'text-emerald-800' : 'text-emerald-400'}`}>
+          <span className={`font-bold truncate ${isDay ? 'text-emerald-800' : 'text-emerald-400'}`}>
             Worth ₹{walletHoldingSummary.totalInrFormatted} INR
           </span>
         </button>
+
+        {/* Payment Completion Alerts & Notifications Popover */}
+        {notificationsOpen && (
+          <div
+            data-testid="navbar-notifications-popover"
+            className={`fixed sm:absolute left-3 right-3 sm:left-auto sm:right-0 top-16 sm:top-full mt-1 sm:mt-2 w-auto sm:w-96 rounded-2xl border p-4 space-y-3 z-50 ${
+              isDay
+                ? 'bg-white border-slate-200 text-slate-900 shadow-2xl'
+                : 'bg-[#0D1422] border-emerald-500/35 text-slate-100 shadow-2xl'
+            }`}
+          >
+            <div className="flex items-center justify-between pb-2.5 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <Bell className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span className="text-xs font-bold uppercase tracking-wider font-mono text-emerald-400">
+                  Payment &amp; Order Alerts ({notifications.length})
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNotificationsOpen(false)}
+                className="text-slate-400 hover:text-slate-200 cursor-pointer"
+                aria-label="Close notifications"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {notifications.length === 0 ? (
+              <div className="py-6 text-center text-xs text-slate-400 font-mono">
+                No payment completion alerts yet.
+              </div>
+            ) : (
+              <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                {notifications.slice(0, 12).map((notif) => (
+                  <div
+                    key={notif.id}
+                    onClick={() => {
+                      setNotificationsOpen(false);
+                      if (notif.orderId && onOpenOrderFromNotification) {
+                        onOpenOrderFromNotification(notif.orderId);
+                      } else {
+                        onNavigate('orders');
+                      }
+                    }}
+                    className={`p-3 rounded-xl border text-left transition-colors cursor-pointer space-y-1 ${
+                      isDay
+                        ? 'bg-slate-50 hover:bg-emerald-50/70 border-slate-200'
+                        : 'bg-[#131A24] hover:bg-[#192434] border-white/[0.08]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-bold text-emerald-400 truncate">
+                        {notif.title}
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-400 shrink-0">
+                        {new Date(notif.createdAt).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed opacity-90">{notif.message}</p>
+                    {notif.orderId && (
+                      <div className="text-[10px] font-mono text-cyan-400 pt-0.5">
+                        Click to open Order #{notif.orderId} →
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Right-Aligned Wallet Holdings & Rupee Worth Breakdown Popover */}
         {walletBreakdownOpen && (
           <div
             data-testid="navbar-wallet-holdings-popover"
-            className={`absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-2xl border p-4 space-y-3 z-50 ${
+            className={`fixed sm:absolute left-3 right-3 sm:left-auto sm:right-0 top-16 sm:top-full mt-1 sm:mt-2 w-auto sm:w-96 rounded-2xl border p-4 space-y-3 z-50 ${
               isDay
                 ? 'bg-white border-slate-200 text-slate-900 shadow-2xl'
                 : 'bg-[#0D1422] border-emerald-500/35 text-slate-100 shadow-2xl'
@@ -958,30 +1026,30 @@ export const Navbar: React.FC<NavbarProps> = ({
     <nav
       data-testid="navbar-mobile-bottom-bar"
       aria-label="Mobile Bottom Navigation"
-      className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 px-2 py-1.5 border-t backdrop-blur-md flex items-center justify-around transition-colors ${
+      className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 px-1 sm:px-2 py-1.5 border-t backdrop-blur-md grid grid-cols-6 gap-0.5 items-center transition-colors ${
         isDay
           ? 'bg-white/95 border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]'
           : 'bg-[#0B0E14]/95 border-white/[0.08] shadow-[0_-4px_20px_rgba(0,0,0,0.5)]'
       }`}
     >
       {[
-        { route: 'home' as AppRoute, label: 'Home', icon: <Home className="w-5 h-5" /> },
-        { route: 'marketplace' as AppRoute, label: 'Market', icon: <Store className="w-5 h-5" /> },
-        { route: 'swap' as AppRoute, label: 'Swap', icon: <ArrowLeftRight className="w-5 h-5" /> },
-        { route: 'create-offer' as AppRoute, label: 'Post Ad', icon: <PlusCircle className="w-5 h-5" /> },
+        { route: 'marketplace' as AppRoute, label: 'P2P Market', icon: <Store className="w-4 h-4 sm:w-5 sm:h-5" /> },
+        { route: 'pulse' as AppRoute, label: 'Trader Feed', icon: <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" /> },
+        { route: 'swap' as AppRoute, label: 'Swap', icon: <ArrowLeftRight className="w-4 h-4 sm:w-5 sm:h-5" /> },
+        { route: 'create-offer' as AppRoute, label: 'Post Ad', icon: <PlusCircle className="w-4 h-4 sm:w-5 sm:h-5" /> },
         {
           route: 'orders' as AppRoute,
-          label: 'Orders',
+          label: activeOrdersCount > 0 ? `Orders (${activeOrdersCount})` : 'Orders',
           icon: (
             <div className="relative">
-              <FileText className="w-5 h-5" />
+              <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
               {activeOrdersCount > 0 && (
                 <span className="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-amber-400" />
               )}
             </div>
           ),
         },
-        { route: 'dashboard' as AppRoute, label: 'Profile', icon: <LayoutDashboard className="w-5 h-5" /> },
+        { route: 'dashboard' as AppRoute, label: 'Profile', icon: <LayoutDashboard className="w-4 h-4 sm:w-5 sm:h-5" /> },
       ].map((item) => {
         const isActive = activeRoute === item.route;
         return (
@@ -990,7 +1058,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             type="button"
             data-testid={`mobile-bottom-nav-${item.route}`}
             onClick={() => onNavigate(item.route)}
-            className={`flex flex-col items-center justify-center gap-1 min-w-[52px] py-1 px-1 rounded-lg transition-colors cursor-pointer ${
+            className={`flex flex-col items-center justify-center gap-1 min-w-0 w-full py-1 px-0.5 rounded-lg transition-colors cursor-pointer ${
               isActive
                 ? isDay
                   ? 'text-[#0B65C6] font-bold'
@@ -1001,7 +1069,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <span className="shrink-0">{item.icon}</span>
-            <span className="text-[10px] font-mono leading-none">{item.label}</span>
+            <span className="text-[9px] sm:text-[10px] font-mono leading-none truncate max-w-full">
+              {item.label}
+            </span>
           </button>
         );
       })}

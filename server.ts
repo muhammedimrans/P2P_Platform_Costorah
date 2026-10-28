@@ -1553,7 +1553,7 @@ async function startServer() {
   // User Login & Registration (Username/Email + Password)
   app.post('/api/auth/user-login', (req, res) => {
     try {
-      const { mode, identifier, password, displayName, email, countryCode } = req.body;
+      const { mode, identifier, password, displayName, email, countryCode, avatarUrl, bio } = req.body;
       if (mode === 'REGISTER') {
         const cleanEmail = String(email || identifier || '').trim().toLowerCase();
         const cleanName = String(displayName || '').trim();
@@ -1584,6 +1584,8 @@ async function startServer() {
           id: newId,
           displayName: cleanName,
           email: cleanEmail,
+          avatarUrl: typeof avatarUrl === 'string' && avatarUrl.trim() ? avatarUrl.trim() : undefined,
+          bio: typeof bio === 'string' && bio.trim() ? bio.trim() : 'Verified P2P Escrow Trader',
           countryCode: selectedCountry,
           preferredFiat: lockedFiat,
           role: 'USER',
@@ -2961,18 +2963,102 @@ async function startServer() {
         `Buyer declared fiat sent with reference=${updated.paymentReference}`
       );
       const seller = users.get(existingOrder.sellerId);
+      const buyer = users.get(existingOrder.buyerId);
       const sellerChannel = seller?.notificationPreferences?.paymentReceived !== false ? 'BOTH' : 'IN_APP';
+      const formattedAmount = `${formatMinor2(updated.grossFiatMinor)} ${updated.fiatCurrency}`;
       addNotification(
         existingOrder.sellerId,
-        'Payment Received — Fiat Declared Sent',
-        `Buyer submitted payment reference ${updated.paymentReference} for order ${orderId}. Verify bank receipt before authorizing release.`,
+        `Payment Completed by Buyer — Order #${orderId}`,
+        `${buyer?.displayName || 'Buyer'} completed fiat payment of ${formattedAmount} via ${updated.paymentMethod} (Ref: ${updated.paymentReference}).${note ? ` Note: "${note}"` : ''} Please verify receipt and release escrow.`,
         orderId,
         sellerChannel
       );
+      if (existingOrder.buyerId !== existingOrder.sellerId) {
+        addNotification(
+          existingOrder.buyerId,
+          `Payment Completion Alert Sent — Order #${orderId}`,
+          `Seller (${seller?.displayName || existingOrder.sellerId}) has been alerted that your payment of ${formattedAmount} (Ref: ${updated.paymentReference}) is completed.`,
+          orderId,
+          'IN_APP'
+        );
+      }
       persistSnapshot();
       return res.json({ order: updated, state: getSnapshot() });
     } catch (e: unknown) {
       return res.status(400).json({ error: e instanceof Error ? e.message : 'Failed to submit payment declaration' });
+    }
+  });
+
+  // Notify counterparty user about payment completion (sends In-App/Email Alert + Trade Room Message)
+  app.post('/api/orders/:orderId/notify-payment', (req, res) => {
+    try {
+      const { orderId } = req.params;
+      const { customMessage, channel } = req.body;
+      const currentUser = users.get(activeUserId)!;
+      const engineAny = engine as unknown as { orders: Map<string, EscrowOrderRecord> };
+      const existingOrder = engineAny.orders.get(orderId);
+      if (!existingOrder) return res.status(404).json({ error: 'Order not found.' });
+
+      const isBuyerActor = currentUser.id === existingOrder.buyerId;
+      const recipientId = isBuyerActor ? existingOrder.sellerId : existingOrder.buyerId;
+      const recipientUser = users.get(recipientId);
+      const formattedAmount = `${formatMinor2(existingOrder.grossFiatMinor)} ${existingOrder.fiatCurrency}`;
+      const selectedChannel: 'IN_APP' | 'EMAIL' | 'BOTH' =
+        channel === 'EMAIL' || channel === 'BOTH' ? channel : 'IN_APP';
+
+      const defaultAlertText =
+        existingOrder.state === 'COMPLETED'
+          ? `Payment & escrow settlement completed for Order #${orderId}: ${formattedAmount} (${formatMicro6(existingOrder.cryptoQuantityMicro)} ${existingOrder.asset} released).`
+          : `Payment of ${formattedAmount} via ${existingOrder.paymentMethod} is completed (Ref: ${existingOrder.paymentReference || 'UTR-VERIFIED'}). Please check your account and release ${formatMicro6(existingOrder.cryptoQuantityMicro)} ${existingOrder.asset} from escrow.`;
+
+      const finalAlertMessage =
+        customMessage && String(customMessage).trim().length > 0
+          ? String(customMessage).trim()
+          : defaultAlertText;
+
+      const list = messages.get(orderId) || [];
+      list.push({
+        id: `msg_notif_${Date.now()}`,
+        orderId,
+        senderId: currentUser.id,
+        senderName: currentUser.displayName,
+        senderRole: currentUser.role === 'ADMIN' ? 'ADMIN' : isBuyerActor ? 'BUYER' : 'SELLER',
+        content: `🔔 PAYMENT COMPLETION ALERT TO ${(recipientUser?.displayName || recipientId).toUpperCase()}: ${finalAlertMessage}`,
+        createdAt: new Date().toISOString(),
+      });
+      messages.set(orderId, list);
+
+      addNotification(
+        recipientId,
+        `Payment Completion Alert — Order #${orderId}`,
+        `From ${currentUser.displayName.replace(' (You)', '')}: ${finalAlertMessage}`,
+        orderId,
+        selectedChannel
+      );
+
+      if (recipientId !== currentUser.id) {
+        addNotification(
+          currentUser.id,
+          `Alert Delivered to ${recipientUser?.displayName || 'Counterparty'} — Order #${orderId}`,
+          `Payment completion alert sent (${selectedChannel}): "${finalAlertMessage}"`,
+          orderId,
+          selectedChannel
+        );
+      }
+
+      logAudit(
+        currentUser.id,
+        currentUser.role,
+        'PAYMENT_COMPLETION_NOTIFICATION_DISPATCHED',
+        'ORDER',
+        orderId,
+        `Sent payment completion alert (${selectedChannel}) to ${recipientUser?.displayName || recipientId}: ${finalAlertMessage}`
+      );
+
+      persistSnapshot();
+      return res.json({ order: existingOrder, state: getSnapshot() });
+    } catch (e: unknown) {
+      return res.status(400).json({ error: e instanceof Error ? e.message : 'Failed to send payment notification' });
     }
   });
 
@@ -3029,10 +3115,20 @@ async function startServer() {
       );
       addNotification(
         updated.buyerId,
-        'Escrow Released — Order Completed',
-        `${formatMicro6(updated.cryptoQuantityMicro)} ${updated.asset} has been credited to your available balance.`,
-        orderId
+        `Payment & Settlement Completed — Order #${orderId}`,
+        `Seller confirmed your fiat payment and released ${formatMicro6(updated.cryptoQuantityMicro)} ${updated.asset} to your available balance.`,
+        orderId,
+        'BOTH'
       );
+      if (updated.sellerId !== updated.buyerId) {
+        addNotification(
+          updated.sellerId,
+          `Escrow Settlement Completed — Order #${orderId}`,
+          `You confirmed payment receipt and released ${formatMicro6(updated.cryptoQuantityMicro)} ${updated.asset} to ${users.get(updated.buyerId)?.displayName || 'Buyer'}.`,
+          orderId,
+          'IN_APP'
+        );
+      }
       persistSnapshot();
       return res.json({ order: updated, state: getSnapshot() });
     } catch (e: unknown) {

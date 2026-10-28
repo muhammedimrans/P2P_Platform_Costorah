@@ -265,211 +265,351 @@ export const PublishedOffersManager: React.FC<PublishedOffersManagerProps> = ({
           You have no active or paused published offers right now.
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-white/[0.06] text-xs text-slate-400 bg-[#0B0E14]">
-                <th className="py-3 px-4">Offer ID &amp; Type</th>
-                <th className="py-3 px-4">Asset &amp; Unit Price</th>
-                <th className="py-3 px-4 text-right">Amount &amp; Order Limits</th>
-                <th className="py-3 px-4">Payment Methods</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Actions (Edit / Pause / Cancel)</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/[0.06] text-xs font-mono tabular-nums">
-              {myActiveAndPausedOffers.map((off) => {
-                const offSym = FIAT_SYMBOLS[off.fiatCurrency];
-                const offTotalFiatMinor = Math.max(
-                  1,
-                  Math.round((off.availableQuantityMicro * off.unitPriceFiatMinor) / 1_000_000)
-                );
-                const offCapMinor = calculateMaxOrderCapMinor({
-                  asset: off.asset,
-                  unitPriceFiatMinor: off.unitPriceFiatMinor,
-                });
-                const offEffectiveMaxMinor = Math.min(
-                  off.maxOrderFiatMinor,
-                  offTotalFiatMinor,
-                  offCapMinor
-                );
-                const offEffectiveMinMinor = Math.min(
-                  off.minOrderFiatMinor,
-                  offEffectiveMaxMinor
-                );
-                return (
-                  <tr
-                    key={off.id}
-                    data-testid={`published-offer-row-${off.id}`}
-                    className="hover:bg-white/[0.02]"
-                  >
-                    <td className="py-3.5 px-4">
-                      <div className="font-bold text-slate-100">{off.id}</div>
-                      <span
-                        className={`inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold ${
-                          off.side === 'SELL'
-                            ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                            : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                        }`}
-                      >
-                        {off.side === 'SELL' ? 'SELL CRYPTO AD' : 'BUY CRYPTO AD'}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-1.5">
-                        <CryptoAssetIcon asset={off.asset} className="w-4 h-4 shrink-0" />
-                        <span className="font-bold text-emerald-400">
-                          {offSym}
-                          {formatMinor2(off.unitPriceFiatMinor)} {off.fiatCurrency}
-                        </span>
-                      </div>
-                      <div className="text-[11px] text-slate-400 mt-0.5">per 1 {off.asset}</div>
-                    </td>
-                    <td className="py-3.5 px-4 text-right text-slate-200">
-                      <div>
-                        {off.side === 'SELL' ? 'Selling' : 'Buying'}:{' '}
-                        <span className="font-semibold text-slate-100">
-                          {formatMicro6(off.availableQuantityMicro)} {off.asset}
-                        </span>{' '}
-                        <span className="text-emerald-400 font-semibold">
-                          ({offSym}
-                          {formatMinor2(offTotalFiatMinor)} {off.fiatCurrency})
-                        </span>
-                      </div>
-                      <div className="text-[11px] text-slate-400 mt-0.5">
-                        Limit: {offSym}
-                        {formatMinor2(offEffectiveMinMinor)} – {offSym}
-                        {formatMinor2(offEffectiveMaxMinor)} {off.fiatCurrency}
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-4 font-sans">
-                      <div className="text-xs text-slate-200">
-                        {off.paymentMethods.join(', ')}
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span
-                        className={`px-2 py-0.5 rounded text-[11px] font-bold ${
-                          off.status === 'OPEN'
-                            ? 'bg-emerald-500/20 text-emerald-300'
-                            : 'bg-amber-500/20 text-amber-300'
-                        }`}
-                      >
-                        {off.status}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 text-right font-sans relative">
-                      <div className="inline-flex items-center gap-1.5">
-                        <button
-                          type="button"
-                          data-testid={`edit-offer-btn-${off.id}`}
-                          onClick={() => openEditModal(off)}
-                          className="px-2.5 py-1 text-xs text-cyan-300 bg-cyan-500/15 border border-cyan-500/30 rounded hover:bg-cyan-500/25 cursor-pointer inline-flex items-center gap-1"
+        <>
+          {/* Desktop Table View (md and up) */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-white/[0.06] text-xs text-slate-400 bg-[#0B0E14]">
+                  <th className="py-3 px-4">Offer ID &amp; Type</th>
+                  <th className="py-3 px-4">Asset &amp; Unit Price</th>
+                  <th className="py-3 px-4 text-right">Amount &amp; Order Limits</th>
+                  <th className="py-3 px-4">Payment Methods</th>
+                  <th className="py-3 px-4">Status</th>
+                  <th className="py-3 px-4 text-right">Actions (Edit / Pause / Cancel)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.06] text-xs font-mono tabular-nums">
+                {myActiveAndPausedOffers.map((off) => {
+                  const offSym = FIAT_SYMBOLS[off.fiatCurrency];
+                  const offTotalFiatMinor = Math.max(
+                    1,
+                    Math.round((off.availableQuantityMicro * off.unitPriceFiatMinor) / 1_000_000)
+                  );
+                  const offCapMinor = calculateMaxOrderCapMinor({
+                    asset: off.asset,
+                    unitPriceFiatMinor: off.unitPriceFiatMinor,
+                  });
+                  const offEffectiveMaxMinor = Math.min(
+                    off.maxOrderFiatMinor,
+                    offTotalFiatMinor,
+                    offCapMinor
+                  );
+                  const offEffectiveMinMinor = Math.min(
+                    off.minOrderFiatMinor,
+                    offEffectiveMaxMinor
+                  );
+                  return (
+                    <tr
+                      key={off.id}
+                      data-testid={`published-offer-row-${off.id}`}
+                      className="hover:bg-white/[0.02]"
+                    >
+                      <td className="py-3.5 px-4">
+                        <div className="font-bold text-slate-100">{off.id}</div>
+                        <span
+                          className={`inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold ${
+                            off.side === 'SELL'
+                              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                              : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                          }`}
                         >
-                          <Pencil className="w-3.5 h-3.5" />
-                          <span>Edit</span>
-                        </button>
-
-                        {off.status === 'OPEN' ? (
+                          {off.side === 'SELL' ? 'SELL CRYPTO AD' : 'BUY CRYPTO AD'}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <div className="flex items-center gap-1.5">
+                          <CryptoAssetIcon asset={off.asset} className="w-4 h-4 shrink-0" />
+                          <span className="font-bold text-emerald-400">
+                            {offSym}
+                            {formatMinor2(off.unitPriceFiatMinor)} {off.fiatCurrency}
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-slate-400 mt-0.5">per 1 {off.asset}</div>
+                      </td>
+                      <td className="py-3.5 px-4 text-right text-slate-200">
+                        <div>
+                          {off.side === 'SELL' ? 'Selling' : 'Buying'}:{' '}
+                          <span className="font-semibold text-slate-100">
+                            {formatMicro6(off.availableQuantityMicro)} {off.asset}
+                          </span>{' '}
+                          <span className="text-emerald-400 font-semibold">
+                            ({offSym}
+                            {formatMinor2(offTotalFiatMinor)} {off.fiatCurrency})
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-slate-400 mt-0.5">
+                          Limit: {offSym}
+                          {formatMinor2(offEffectiveMinMinor)} – {offSym}
+                          {formatMinor2(offEffectiveMaxMinor)} {off.fiatCurrency}
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-4 font-sans">
+                        <div className="text-xs text-slate-200">
+                          {off.paymentMethods.join(', ')}
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <span
+                          className={`px-2 py-0.5 rounded text-[11px] font-bold ${
+                            off.status === 'OPEN'
+                              ? 'bg-emerald-500/20 text-emerald-300'
+                              : 'bg-amber-500/20 text-amber-300'
+                          }`}
+                        >
+                          {off.status}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4 text-right font-sans relative">
+                        <div className="inline-flex items-center gap-1.5">
                           <button
                             type="button"
-                            data-testid={`pause-offer-btn-${off.id}`}
+                            data-testid={`edit-offer-btn-${off.id}`}
+                            onClick={() => openEditModal(off)}
+                            className="px-2.5 py-1 text-xs text-cyan-300 bg-cyan-500/15 border border-cyan-500/30 rounded hover:bg-cyan-500/25 cursor-pointer inline-flex items-center gap-1"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                            <span>Edit</span>
+                          </button>
+
+                          {off.status === 'OPEN' ? (
+                            <button
+                              type="button"
+                              data-testid={`pause-offer-btn-${off.id}`}
+                              aria-expanded={
+                                confirmAction?.offer.id === off.id &&
+                                confirmAction?.action === 'PAUSE'
+                              }
+                              onClick={() => {
+                                setActionError(null);
+                                setConfirmAction({ offer: off, action: 'PAUSE' });
+                              }}
+                              className="px-2.5 py-1 text-xs text-amber-300 bg-amber-500/15 border border-amber-500/30 rounded hover:bg-amber-500/25 cursor-pointer inline-flex items-center gap-1"
+                            >
+                              <PauseCircle className="w-3.5 h-3.5" />
+                              <span>Pause</span>
+                            </button>
+                          ) : off.status === 'PAUSED' ? (
+                            <button
+                              type="button"
+                              data-testid={`resume-offer-btn-${off.id}`}
+                              disabled={actionBusy}
+                              onClick={() => handleResumeOffer(off)}
+                              className="px-2.5 py-1 text-xs text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 rounded hover:bg-emerald-500/25 cursor-pointer inline-flex items-center gap-1"
+                            >
+                              <PlayCircle className="w-3.5 h-3.5" />
+                              <span>Resume</span>
+                            </button>
+                          ) : null}
+
+                          <button
+                            type="button"
+                            data-testid={`cancel-offer-btn-${off.id}`}
                             aria-expanded={
                               confirmAction?.offer.id === off.id &&
-                              confirmAction?.action === 'PAUSE'
+                              confirmAction?.action === 'CANCEL'
                             }
                             onClick={() => {
                               setActionError(null);
-                              setConfirmAction({ offer: off, action: 'PAUSE' });
+                              setConfirmAction({ offer: off, action: 'CANCEL' });
                             }}
-                            className="px-2.5 py-1 text-xs text-amber-300 bg-amber-500/15 border border-amber-500/30 rounded hover:bg-amber-500/25 cursor-pointer inline-flex items-center gap-1"
+                            className="px-2.5 py-1 text-xs text-red-300 bg-red-500/15 border border-red-500/30 rounded hover:bg-red-500/25 cursor-pointer inline-flex items-center gap-1"
                           >
-                            <PauseCircle className="w-3.5 h-3.5" />
-                            <span>Pause</span>
+                            <XCircle className="w-3.5 h-3.5" />
+                            <span>Cancel</span>
                           </button>
-                        ) : off.status === 'PAUSED' ? (
-                          <button
-                            type="button"
-                            data-testid={`resume-offer-btn-${off.id}`}
-                            disabled={actionBusy}
-                            onClick={() => handleResumeOffer(off)}
-                            className="px-2.5 py-1 text-xs text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 rounded hover:bg-emerald-500/25 cursor-pointer inline-flex items-center gap-1"
+                        </div>
+
+                        {/* Inline Popover Indicator when this row's Pause/Cancel is awaiting confirmation */}
+                        {confirmAction?.offer.id === off.id && (
+                          <div
+                            role="region"
+                            aria-label={`Confirm ${confirmAction.action} for offer ${off.id}`}
+                            data-testid={`offer-inline-confirm-popover-${off.id}`}
+                            className={`mt-2 p-2.5 rounded-lg border text-left text-[11px] flex flex-wrap items-center justify-between gap-2 ${
+                              confirmAction.action === 'CANCEL'
+                                ? 'bg-red-950/80 border-red-500/50 text-red-200'
+                                : 'bg-amber-950/80 border-amber-500/50 text-amber-200'
+                            }`}
                           >
-                            <PlayCircle className="w-3.5 h-3.5" />
-                            <span>Resume</span>
-                          </button>
-                        ) : null}
+                            <span className="font-medium">
+                              {confirmAction.action === 'CANCEL'
+                                ? `Confirm cancelling ${off.id} (${formatMicro6(off.availableQuantityMicro)} ${off.asset})?`
+                                : `Confirm pausing ${off.id} (${formatMicro6(off.availableQuantityMicro)} ${off.asset})?`}
+                            </span>
+                            <div className="inline-flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                disabled={actionBusy}
+                                onClick={() => setConfirmAction(null)}
+                                className="px-2 py-0.5 rounded bg-[#0B0E14] border border-white/15 text-slate-300 hover:text-white cursor-pointer"
+                              >
+                                Keep
+                              </button>
+                              <button
+                                type="button"
+                                disabled={actionBusy}
+                                onClick={handleConfirmStatusAction}
+                                className={`px-2.5 py-0.5 rounded font-semibold cursor-pointer ${
+                                  confirmAction.action === 'CANCEL'
+                                    ? 'bg-red-500 hover:bg-red-400 text-white'
+                                    : 'bg-amber-400 hover:bg-amber-300 text-[#0B0E14]'
+                                }`}
+                              >
+                                {actionBusy
+                                  ? 'Processing...'
+                                  : confirmAction.action === 'CANCEL'
+                                  ? 'Confirm Cancel'
+                                  : 'Confirm Pause'}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
 
-                        <button
-                          type="button"
-                          data-testid={`cancel-offer-btn-${off.id}`}
-                          aria-expanded={
-                            confirmAction?.offer.id === off.id &&
-                            confirmAction?.action === 'CANCEL'
-                          }
-                          onClick={() => {
-                            setActionError(null);
-                            setConfirmAction({ offer: off, action: 'CANCEL' });
-                          }}
-                          className="px-2.5 py-1 text-xs text-red-300 bg-red-500/15 border border-red-500/30 rounded hover:bg-red-500/25 cursor-pointer inline-flex items-center gap-1"
-                        >
-                          <XCircle className="w-3.5 h-3.5" />
-                          <span>Cancel</span>
-                        </button>
-                      </div>
-
-                      {/* Inline Popover Indicator when this row's Pause/Cancel is awaiting confirmation */}
-                      {confirmAction?.offer.id === off.id && (
-                        <div
-                          role="region"
-                          aria-label={`Confirm ${confirmAction.action} for offer ${off.id}`}
-                          data-testid={`offer-inline-confirm-popover-${off.id}`}
-                          className={`mt-2 p-2.5 rounded-lg border text-left text-[11px] flex flex-wrap items-center justify-between gap-2 ${
-                            confirmAction.action === 'CANCEL'
-                              ? 'bg-red-950/80 border-red-500/50 text-red-200'
-                              : 'bg-amber-950/80 border-amber-500/50 text-amber-200'
+          {/* Mobile Touch-Optimized Card View (< md screens) */}
+          <div className="block md:hidden divide-y divide-white/[0.06] text-xs font-mono">
+            {myActiveAndPausedOffers.map((off) => {
+              const offSym = FIAT_SYMBOLS[off.fiatCurrency];
+              const offTotalFiatMinor = Math.max(
+                1,
+                Math.round((off.availableQuantityMicro * off.unitPriceFiatMinor) / 1_000_000)
+              );
+              const offCapMinor = calculateMaxOrderCapMinor({
+                asset: off.asset,
+                unitPriceFiatMinor: off.unitPriceFiatMinor,
+              });
+              const offEffectiveMaxMinor = Math.min(
+                off.maxOrderFiatMinor,
+                offTotalFiatMinor,
+                offCapMinor
+              );
+              const offEffectiveMinMinor = Math.min(
+                off.minOrderFiatMinor,
+                offEffectiveMaxMinor
+              );
+              return (
+                <div key={off.id} className="p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="space-y-1">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="font-bold text-slate-100">{off.id}</span>
+                        <span
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                            off.side === 'SELL'
+                              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                              : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
                           }`}
                         >
-                          <span className="font-medium">
-                            {confirmAction.action === 'CANCEL'
-                              ? `Confirm cancelling ${off.id} (${formatMicro6(off.availableQuantityMicro)} ${off.asset})?`
-                              : `Confirm pausing ${off.id} (${formatMicro6(off.availableQuantityMicro)} ${off.asset})?`}
-                          </span>
-                          <div className="inline-flex items-center gap-1.5">
-                            <button
-                              type="button"
-                              disabled={actionBusy}
-                              onClick={() => setConfirmAction(null)}
-                              className="px-2 py-0.5 rounded bg-[#0B0E14] border border-white/15 text-slate-300 hover:text-white cursor-pointer"
-                            >
-                              Keep
-                            </button>
-                            <button
-                              type="button"
-                              disabled={actionBusy}
-                              onClick={handleConfirmStatusAction}
-                              className={`px-2.5 py-0.5 rounded font-semibold cursor-pointer ${
-                                confirmAction.action === 'CANCEL'
-                                  ? 'bg-red-500 hover:bg-red-400 text-white'
-                                  : 'bg-amber-400 hover:bg-amber-300 text-[#0B0E14]'
-                              }`}
-                            >
-                              {actionBusy
-                                ? 'Processing...'
-                                : confirmAction.action === 'CANCEL'
-                                ? 'Confirm Cancel'
-                                : 'Confirm Pause'}
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                          {off.side === 'SELL' ? 'SELL AD' : 'BUY AD'}
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                            off.status === 'OPEN'
+                              ? 'bg-emerald-500/20 text-emerald-300'
+                              : 'bg-amber-500/20 text-amber-300'
+                          }`}
+                        >
+                          {off.status}
+                        </span>
+                      </div>
+                      <div className="text-[11px] font-sans text-slate-400">
+                        Rails: <span className="text-slate-200">{off.paymentMethods.join(', ')}</span>
+                      </div>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      <div className="flex items-center justify-end gap-1 font-bold text-emerald-400 text-sm">
+                        <CryptoAssetIcon asset={off.asset} className="w-4 h-4 shrink-0" />
+                        <span>
+                          {offSym}
+                          {formatMinor2(off.unitPriceFiatMinor)}
+                        </span>
+                      </div>
+                      <div className="text-[10px] text-slate-400">per 1 {off.asset}</div>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-[#0B0E14] border border-white/[0.06] space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">
+                        {off.side === 'SELL' ? 'Selling:' : 'Buying:'}
+                      </span>
+                      <span className="text-slate-100 font-semibold">
+                        {formatMicro6(off.availableQuantityMicro)} {off.asset}{' '}
+                        <span className="text-emerald-400">
+                          ({offSym}
+                          {formatMinor2(offTotalFiatMinor)})
+                        </span>
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Order Limits:</span>
+                      <span className="text-slate-200">
+                        {offSym}
+                        {formatMinor2(offEffectiveMinMinor)} – {offSym}
+                        {formatMinor2(offEffectiveMaxMinor)} {off.fiatCurrency}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 font-sans">
+                    <button
+                      type="button"
+                      onClick={() => openEditModal(off)}
+                      className="py-2 px-2 text-xs font-semibold text-cyan-300 bg-cyan-500/15 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/25 cursor-pointer inline-flex items-center justify-center gap-1"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
+
+                    {off.status === 'OPEN' ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActionError(null);
+                          setConfirmAction({ offer: off, action: 'PAUSE' });
+                        }}
+                        className="py-2 px-2 text-xs font-semibold text-amber-300 bg-amber-500/15 border border-amber-500/30 rounded-lg hover:bg-amber-500/25 cursor-pointer inline-flex items-center justify-center gap-1"
+                      >
+                        <PauseCircle className="w-3.5 h-3.5" />
+                        <span>Pause</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={actionBusy}
+                        onClick={() => handleResumeOffer(off)}
+                        className="py-2 px-2 text-xs font-semibold text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 rounded-lg hover:bg-emerald-500/25 cursor-pointer inline-flex items-center justify-center gap-1"
+                      >
+                        <PlayCircle className="w-3.5 h-3.5" />
+                        <span>Resume</span>
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActionError(null);
+                        setConfirmAction({ offer: off, action: 'CANCEL' });
+                      }}
+                      className="py-2 px-2 text-xs font-semibold text-red-300 bg-red-500/15 border border-red-500/30 rounded-lg hover:bg-red-500/25 cursor-pointer inline-flex items-center justify-center gap-1"
+                    >
+                      <XCircle className="w-3.5 h-3.5" />
+                      <span>Cancel</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
       )}
 
       {/* Double-Confirmation Modal for PAUSE and CANCEL */}

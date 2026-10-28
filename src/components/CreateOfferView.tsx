@@ -68,6 +68,11 @@ interface CreateOfferViewProps {
     maxOrderFiat: string;
     paymentMethods: string[];
     paymentInstructions: string;
+    postAsTweet?: boolean;
+    tweetContent?: string;
+    tweetSentiment?: 'BULLISH' | 'BEARISH' | 'NEUTRAL' | 'ORDER_ALERT';
+    tweetTaggedAssets?: CryptoAsset[];
+    tweetImageUrl?: string;
   }) => Promise<void>;
   onUpdateOfferStatus: (offerId: string, action: 'PAUSE' | 'RESUME' | 'CANCEL') => Promise<void>;
   onEditOffer: (offerId: string, payload: EditOfferPayload) => Promise<void>;
@@ -80,6 +85,7 @@ interface CreateOfferViewProps {
     bankOrProvider: string;
     verifyImmediately: boolean;
   }) => Promise<void>;
+  onNavigatePulse?: () => void;
   livePriceFeed?: LivePriceFeed;
 }
 
@@ -99,6 +105,7 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
   onUpdateOfferStatus,
   onEditOffer,
   onAddPaymentMethod,
+  onNavigatePulse,
   livePriceFeed,
 }) => {
   const [side, setSide] = useState<'SELL' | 'BUY'>('SELL');
@@ -116,6 +123,13 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
   const [newPmIdentifier, setNewPmIdentifier] = useState('');
   const [newPmBank, setNewPmBank] = useState('');
   const [addingPmBusy, setAddingPmBusy] = useState(false);
+
+  // Post Order on Market as a Tweet state
+  const [postAsTweet, setPostAsTweet] = useState<boolean>(true);
+  const [tweetSentiment, setTweetSentiment] = useState<'BULLISH' | 'BEARISH' | 'ORDER_ALERT'>('ORDER_ALERT');
+  const [tweetCustomText, setTweetCustomText] = useState<string>('');
+  const [tweetTaggedAssets, setTweetTaggedAssets] = useState<CryptoAsset[]>(['BTC', 'ETH', 'USDT']);
+  const [tweetImageUrl, setTweetImageUrl] = useState<string>('');
 
   const lockedFiatCurrency = getLockedFiatForCountry(countryCode);
   const countryPolicy = TOP_TRADING_COUNTRIES[countryCode] || TOP_TRADING_COUNTRIES.IN;
@@ -560,6 +574,11 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
     }
     setSubmitting(true);
     try {
+      const symLocal = FIAT_SYMBOLS[lockedFiatCurrency];
+      const defaultTweetBody =
+        tweetCustomText.trim() ||
+        `Just posted a new P2P ${side} Order on the Market: ${totalQuantityCrypto} $${asset} @ ${symLocal}${unitPriceFiat} ${lockedFiatCurrency} via ${selectedMethods.join(', ')}. Limits: ${symLocal}${minOrderFiat} – ${symLocal}${maxOrderFiat}. Instant escrow settlement! #Bitcoin #Ethereum #${asset}`;
+
       await onCreateOffer({
         side,
         asset,
@@ -570,9 +589,14 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
         maxOrderFiat,
         paymentMethods: selectedMethods,
         paymentInstructions,
+        postAsTweet,
+        tweetContent: defaultTweetBody,
+        tweetSentiment,
+        tweetTaggedAssets: Array.from(new Set([asset, ...tweetTaggedAssets])),
+        tweetImageUrl: tweetImageUrl.trim() || undefined,
       });
       setSuccessMsg(
-        `Published ${side} offer for ${totalQuantityCrypto} ${asset} (${FIAT_SYMBOLS[lockedFiatCurrency]}${formatMinor2(totalOfferFiatMinor)} ${lockedFiatCurrency}) @ ${FIAT_SYMBOLS[lockedFiatCurrency]}${unitPriceFiat}/${asset}!`
+        `Published ${side} offer for ${totalQuantityCrypto} ${asset} (${FIAT_SYMBOLS[lockedFiatCurrency]}${formatMinor2(totalOfferFiatMinor)} ${lockedFiatCurrency}) @ ${FIAT_SYMBOLS[lockedFiatCurrency]}${unitPriceFiat}/${asset}${postAsTweet ? ' & shared on Market Tweet Feed!' : '!'}`
       );
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to publish offer');
@@ -626,7 +650,7 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-[#131A24] border border-white/[0.08] rounded-xl p-5 sm:p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="bg-[#131A24] border border-white/[0.08] rounded-xl p-4 sm:p-6 space-y-6">
         {/* STEP 1: Choose I Want to Sell / Buy & Select Asset */}
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -639,12 +663,12 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
               </h2>
             </div>
 
-            <div className="inline-flex p-1 bg-[#0B0E14] border border-white/10 rounded-lg">
+            <div className="grid grid-cols-2 sm:inline-flex w-full sm:w-auto p-1 bg-[#0B0E14] border border-white/10 rounded-lg">
               <button
                 type="button"
                 data-testid="create-offer-side-sell"
                 onClick={() => handleSelectSide('SELL')}
-                className={`px-4 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+                className={`px-3 sm:px-4 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer text-center ${
                   side === 'SELL'
                     ? 'bg-emerald-500 text-[#0B0E14]'
                     : 'text-slate-300 hover:text-white'
@@ -656,7 +680,7 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
                 type="button"
                 data-testid="create-offer-side-buy"
                 onClick={() => handleSelectSide('BUY')}
-                className={`px-4 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+                className={`px-3 sm:px-4 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer text-center ${
                   side === 'BUY'
                     ? 'bg-amber-400 text-[#0B0E14]'
                     : 'text-slate-300 hover:text-white'
@@ -756,12 +780,12 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
               </h2>
             </div>
 
-            <div className="inline-flex p-1 bg-[#0B0E14] border border-white/10 rounded-lg self-start">
+            <div className="grid grid-cols-2 sm:inline-flex w-full sm:w-auto p-1 bg-[#0B0E14] border border-white/10 rounded-lg self-start">
               <button
                 type="button"
                 data-testid="order-mode-multiple-tx"
                 onClick={() => handleSetExecutionMode(false)}
-                className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1.5 sm:py-1 text-xs font-semibold rounded-md transition-colors cursor-pointer text-center ${
                   !singleTransactionOnly
                     ? 'bg-emerald-500 text-[#0B0E14]'
                     : 'text-slate-300 hover:text-white'
@@ -773,7 +797,7 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
                 type="button"
                 data-testid="order-mode-single-tx"
                 onClick={() => handleSetExecutionMode(true)}
-                className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1.5 sm:py-1 text-xs font-semibold rounded-md transition-colors cursor-pointer text-center ${
                   singleTransactionOnly
                     ? 'bg-emerald-500 text-[#0B0E14]'
                     : 'text-slate-300 hover:text-white'
@@ -1143,6 +1167,108 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
           </div>
         )}
 
+        {/* Broadcast Order on Market Tweet Feed Option */}
+        <div
+          data-testid="create-offer-tweet-broadcast-box"
+          className="p-4 bg-[#0B0E14] border border-sky-500/35 rounded-xl space-y-3"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <label className="inline-flex items-center gap-2.5 cursor-pointer">
+              <input
+                type="checkbox"
+                data-testid="post-order-as-tweet-checkbox"
+                checked={postAsTweet}
+                onChange={(e) => setPostAsTweet(e.target.checked)}
+                className="w-4 h-4 accent-emerald-400 rounded cursor-pointer"
+              />
+              <span className="text-xs font-bold text-slate-100">
+                Also Post This Order on the Market Tweet Feed (Share Order &amp; Market Sentiment)
+              </span>
+            </label>
+
+            {postAsTweet && (
+              <div className="inline-flex p-0.5 bg-[#131A24] border border-white/10 rounded-lg text-[11px]">
+                {(['ORDER_ALERT', 'BULLISH', 'BEARISH'] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setTweetSentiment(mode)}
+                    className={`px-2.5 py-1 rounded-md font-semibold cursor-pointer ${
+                      tweetSentiment === mode
+                        ? 'bg-emerald-500 text-[#0B0E14]'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    {mode === 'ORDER_ALERT' ? 'Order Broadcast' : mode}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {postAsTweet && (
+            <div className="space-y-3 pt-2 border-t border-white/[0.06]">
+              <div>
+                <label className="block text-[11px] font-mono text-slate-400 mb-1">
+                  Tweet Commentary &amp; Market Sentiment (Leave blank to auto-generate with #Bitcoin #Ethereum)
+                </label>
+                <textarea
+                  rows={2}
+                  data-testid="create-offer-tweet-textarea"
+                  value={tweetCustomText}
+                  onChange={(e) => setTweetCustomText(e.target.value)}
+                  placeholder={`Just posted a new P2P ${side} Order: ${totalQuantityCrypto} $${asset} @ ${sym}${unitPriceFiat} ${lockedFiatCurrency}! Tagging #Bitcoin #Ethereum`}
+                  className="w-full px-3 py-2 text-xs bg-[#131A24] border border-white/15 rounded-lg text-slate-100"
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[11px] font-mono text-slate-400 mr-1">Tag Assets:</span>
+                  {(['BTC', 'ETH', 'SOL', 'USDT', 'USDC'] as CryptoAsset[]).map((tagSym) => {
+                    const active = tweetTaggedAssets.includes(tagSym);
+                    return (
+                      <button
+                        key={tagSym}
+                        type="button"
+                        onClick={() =>
+                          setTweetTaggedAssets((prev) =>
+                            prev.includes(tagSym)
+                              ? prev.filter((item) => item !== tagSym)
+                              : [...prev, tagSym]
+                          )
+                        }
+                        className={`px-2 py-1 rounded text-[11px] font-mono border cursor-pointer inline-flex items-center gap-1 ${
+                          active
+                            ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                            : 'bg-[#131A24] border-white/10 text-slate-400'
+                        }`}
+                      >
+                        <CryptoAssetIcon asset={tagSym} className="w-3 h-3" />
+                        <span>
+                          {tagSym === 'BTC'
+                            ? '#Bitcoin'
+                            : tagSym === 'ETH'
+                            ? '#Ethereum'
+                            : `#${tagSym}`}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <input
+                  type="text"
+                  value={tweetImageUrl}
+                  onChange={(e) => setTweetImageUrl(e.target.value)}
+                  placeholder="Optional chart / image URL (https://...)"
+                  className="px-3 py-1.5 text-xs font-mono bg-[#131A24] border border-white/15 rounded-lg text-slate-100 w-full sm:w-64"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
         {error && (
           <div role="alert" className="p-3 bg-red-950/60 border border-red-500/40 rounded-lg text-xs text-red-200 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
@@ -1151,9 +1277,20 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
         )}
 
         {successMsg && (
-          <div role="status" className="p-3 bg-emerald-950/60 border border-emerald-500/40 rounded-lg text-xs text-emerald-200 flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>{successMsg}</span>
+          <div role="status" className="p-3 bg-emerald-950/60 border border-emerald-500/40 rounded-lg text-xs text-emerald-200 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>{successMsg}</span>
+            </div>
+            {onNavigatePulse && (
+              <button
+                type="button"
+                onClick={onNavigatePulse}
+                className="px-3 py-1 rounded-lg bg-emerald-400 text-[#0B0E14] font-bold text-xs cursor-pointer shrink-0"
+              >
+                View on Market Tweet Feed →
+              </button>
+            )}
           </div>
         )}
 
@@ -1169,8 +1306,8 @@ export const CreateOfferView: React.FC<CreateOfferViewProps> = ({
               {submitting
                 ? 'Publishing Offer...'
                 : side === 'SELL'
-                ? `Publish Sell Offer · ${totalQuantityCrypto} ${asset} (${sym}${formatMinor2(totalOfferFiatMinor)})`
-                : `Publish Buy Offer · ${totalQuantityCrypto} ${asset} (${sym}${formatMinor2(totalOfferFiatMinor)})`}
+                ? `Publish Sell Offer · ${totalQuantityCrypto} ${asset} (${sym}${formatMinor2(totalOfferFiatMinor)})${postAsTweet ? ' + Tweet' : ''}`
+                : `Publish Buy Offer · ${totalQuantityCrypto} ${asset} (${sym}${formatMinor2(totalOfferFiatMinor)})${postAsTweet ? ' + Tweet' : ''}`}
             </span>
           </button>
         </div>
